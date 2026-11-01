@@ -1,34 +1,231 @@
-# Victory Fitness App
+# Victory Fitness App (Victora)
 
-## Vercel deployment
+> A modern, performance-first cross-platform wellness, training, and Longevity OS application built with **React Native**, **Expo SDK 54**, and **Expo Router v6**. Designed for iOS, Android, and Web (Progressive Web App).
 
-This Expo app exports a static web build to `dist/` and includes a minimal web app manifest plus service worker so it can be deployed on Vercel as a PWA shell.
+---
 
-### Required environment variable
+## Table of Contents
 
-Set this in Vercel for the project:
+- [Overview](#-overview)
+- [Architecture & Flow Diagrams](#-architecture--flow-diagrams)
+  - [1. User Authentication & Session Recovery Flow](#1-user-authentication--session-recovery-flow)
+  - [2. Daily Training & Workout Lifecycle](#2-daily-training--workout-lifecycle)
+  - [3. Health & Longevity OS Synchronization](#3-health--longevity-os-synchronization)
+- [Key Features](#-key-features)
+- [Tech Stack](#-tech-stack)
+- [Folder Structure](#-folder-structure)
+- [Environment Configuration](#-environment-configuration)
+- [Getting Started](#-getting-started)
+- [Available Scripts](#-available-scripts)
+- [Build & Deployment](#-build--deployment)
+  - [PWA / Web Deployment (Vercel)](#pwa--web-deployment-vercel)
+  - [Native Mobile Builds (EAS Build)](#native-mobile-builds-eas-build)
+- [Security & Device Permissions](#-security--device-permissions)
+- [Testing](#-testing)
 
-```bash
-EXPO_PUBLIC_API_URL=https://your-backend-domain.com
+---
+
+## Overview
+
+**Victory Fitness** is a full-featured fitness and lifestyle companion designed to maximize adherence and longevity. It balances guided strength and conditioning routines, intelligent nutrition planning, wearable-based recovery insights, and social accountability mechanics (Duo partnerships, cohort-based challenges, and community chat).
+
+---
+
+## Architecture & Flow Diagrams
+
+### 1. User Authentication & Session Recovery Flow
+
+```mermaid
+flowchart TD
+    Start([App Launch / Deep Link]) --> CheckAuth{Tokens in Storage?}
+    CheckAuth -- No --> Welcome[Welcome / Intro Screen]
+    Welcome --> AuthOptions{User Action}
+    AuthOptions -->|Email & Password / OTP| LoginScreen[Login / Registration Screen]
+    AuthOptions -->|Google OAuth| GoogleFlow[Firebase / Web OAuth]
+
+    CheckAuth -- Yes --> ValidateToken{Token Valid & Fresh?}
+    ValidateToken -- No --> RefreshToken{Refresh Token Valid?}
+    RefreshToken -- Yes --> SaveNewTokens[Update Storage] --> CheckBio{Biometrics Enabled?}
+    RefreshToken -- No --> LoginScreen
+
+    ValidateToken -- Yes --> CheckBio
+    GoogleFlow --> SaveNewTokens
+    LoginScreen --> SaveNewTokens
+
+    CheckBio -- Yes --> BioPrompt[Face ID / Biometric Prompt]
+    CheckBio -- No --> CheckOnboard{Onboarding Complete?}
+    BioPrompt -- Success --> CheckOnboard
+    BioPrompt -- Cancelled / Fallback --> ReAuth[PIN / Password Verification]
+    ReAuth --> CheckOnboard
+
+    CheckOnboard -- No --> OnboardingFlow[Multi-Step Questionnaire & Assessment]
+    OnboardingFlow --> PlanGeneration[Build Initial Plan]
+    PlanGeneration --> HomeTab[(Tabs) Dashboard]
+    CheckOnboard -- Yes --> HomeTab
 ```
 
-Do not leave the default Android emulator URL in production. The deployed web app must point to your hosted backend.
+---
 
-Optional client-side config:
+### 2. Daily Training & Workout Lifecycle
 
-- `EXPO_PUBLIC_API_URL` is the only environment variable the app needs for Junction and other backend calls.
+```mermaid
+flowchart TD
+    Home[Dashboard / Workouts Tab] --> SelectWorkout[Select Daily Workout / Library Item]
+    SelectWorkout --> ViewDetails[Workout Overview & Exercise List]
+    ViewDetails --> StartSession[Start Workout Session]
 
-### Local production build
+    StartSession --> ExerciseLoop{Next Exercise Available?}
+    ExerciseLoop -- Yes --> ActiveExercise[Video Demonstration & Set Tracking]
+    ActiveExercise --> LogSet[Log Reps & Weight]
+    LogSet --> RestTimer[Rest Timer with Audio Cues]
+    RestTimer --> ExerciseLoop
 
-```bash
-npm install
-npm run build:web
+    ExerciseLoop -- No --> FinishSession[Complete Workout Session]
+    FinishSession --> Confetti[Brand Confetti & Completion Modal]
+    Confetti --> LogHistory[Save to Journal & Activity Stream]
+    LogHistory --> RewardPoints[Calculate Points & Tier Progression]
+    RewardPoints --> UpdateStreak[Update Streak & Social Activity Feed]
 ```
 
-### Vercel settings
+---
 
-- Framework preset: `Other`
-- Build command: `npm run build:web`
-- Output directory: `dist`
+### 3. Health & Longevity OS Synchronization
 
-The repo also includes `vercel.json`, so Vercel will apply SPA rewrites for Expo Router routes and serve the PWA assets correctly.
+```mermaid
+flowchart LR
+    subgraph Device Layer
+        HK[Apple HealthKit\niOS]
+        HC[Health Connect\nAndroid]
+        Web[Web Fallback\nManual Logs]
+    end
+
+    subgraph Sync Layer
+        NativeSync[lib/nativeHealthSync.ts]
+        Guard[Permission & Scope Auditor]
+    end
+
+    subgraph Application State
+        Store[Zustand Stores & Cache]
+        LongevityOS[Longevity OS Screen\nSleep, HRV, Steps, Burn]
+        Backend[(Victory Fitness API)]
+    end
+
+    HK --> Guard
+    HC --> Guard
+    Guard --> NativeSync
+    Web --> NativeSync
+    NativeSync --> Store
+    Store --> LongevityOS
+    Store --> Backend
+```
+
+---
+
+## Key Features
+
+- **Adaptive Training Engine**:
+  - Structured workout splits and strength builder wizards.
+  - Interactive workout execution screen with set logging, exercise swaps, video guides, and audio-cued rest timers.
+- **Longevity OS & Recovery Analytics**:
+  - Real-time aggregation of steps, active calories, sleep duration, resting heart rate, and HRV.
+  - Wearables sync status, habit completion digests, and personalized health guidance.
+- **Smart Nutrition & Meal Planning**:
+  - Day-by-day and 7-day meal plan views with comprehensive macronutrient breakdowns.
+  - Interactive grocery shopping list generator, AI-assisted meal analysis, and hydration tracking.
+- **Social & Accountability**:
+  - **Duo Partner Pairing**: Real-time workout check-ins and mutual streak reminders.
+  - **Challenges & Cohorts**: Goal-oriented community challenges with participant leaderboards and dedicated discussion chats.
+  - **Victor AI Coach**: Dynamic motivational suggestions and quick interactive coaching prompts.
+- **Security & Multi-Platform Identity**:
+  - Biometric quick-unlock (Face ID / Touch ID / Android BiometricPrompt).
+  - Google Identity Services & Firebase Web Push integration.
+  - Multi-language support (English, German, French, Spanish, Italian, Dutch, Portuguese, Bengali).
+
+---
+
+## Tech Stack
+
+| Domain                    | Technology / Library                                                              |
+| ------------------------- | --------------------------------------------------------------------------------- |
+| **Core Framework**        | [React Native 0.81](https://reactnative.dev/), [React 19](https://react.dev/)     |
+| **Platform & SDK**        | [Expo SDK 54](https://docs.expo.dev/) (New Architecture Enabled)                  |
+| **Routing**               | [Expo Router v6](https://docs.expo.dev/router/introduction/)                      |
+| **State Management**      | [Zustand](https://github.com/pmndrs/zustand)                                      |
+| **Local Storage**         | `@react-native-async-storage/async-storage`                                       |
+| **Biometrics & Security** | `expo-local-authentication`, `jose`                                               |
+| **Health Integrations**   | `react-native-health` (HealthKit), `react-native-health-connect` (Health Connect) |
+| **Audio & Media**         | `expo-audio`, `expo-image-picker`, `expo-sharing`, `react-native-webview`         |
+| **Push Notifications**    | `expo-notifications`, Firebase Web Push, Service Worker                           |
+| **UI Components & Icons** | `expo-linear-gradient`, `@expo/vector-icons`, Inter & Clash Display typography    |
+| **Web Target**            | Metro Web Bundler, static export, PWA manifest and service worker                 |
+
+---
+
+## Folder Structure
+
+```text
+victory-fitness-app/
+├── app/                              # Expo Router file-based route definitions
+│   ├── (auth)/                       # Authentication screens (login, register, welcome, verify)
+│   ├── (tabs)/                       # Main bottom navigation tabs
+│   │   ├── index.tsx                 # Home dashboard & daily overview
+│   │   ├── workout.tsx               # Training routines & quick launch
+│   │   ├── mealPlan.tsx              # Nutrition & daily meal tracking
+│   │   ├── challenge.tsx             # Active challenges & leaderboard
+│   │   └── profile.tsx               # User account, stats & settings
+│   ├── admin/                        # Administrative tools & challenge management
+│   ├── challenges/                   # Challenge detail, progress cards & challenge feed
+│   ├── chat/                         # Community and direct messaging
+│   ├── duo/                          # Accountability partner screens
+│   ├── journal/                      # Workout history & progress logs
+│   ├── mealPlan/                     # Weekly meal breakdown & grocery planner
+│   ├── onboard/                      # Assessment & goal onboarding survey
+│   ├── profile/                      # Settings, Longevity OS, terms & privacy
+│   ├── workout-library/              # Categorized exercise library
+│   ├── workoutplan/                  # Custom split generators & routine wizard
+│   ├── _layout.tsx                   # Root navigation stack and providers
+│   └── +html.tsx                     # Web HTML shell customization
+├── assets/                           # Visual assets, branding icons, fonts & sounds
+├── components/                       # Modular UI components
+│   ├── audit/                        # Access restriction & audit boundaries
+│   ├── challenge/                    # Challenge cards, cohort modals & feeds
+│   ├── chat/                         # Interactive coach & chat bubbles
+│   ├── confetti/                     # Completion celebration effects
+│   ├── duo/                          # Partner invite and match dialogs
+│   ├── home/                         # Dashboard cards (streak, water, activity, coach)
+│   ├── nutrition/                    # Macro widgets, meal modals & grocery lists
+│   ├── profile/                      # Habit widgets, wearables sync & account management
+│   └── workout/                      # Exercise timers, video players & workout grid
+├── constants/                        # Global style constants, colors, typography tokens
+├── context/                          # React context providers (theme, session)
+├── hooks/                            # Custom hooks (screen preloading, debounce, state)
+├── lib/                              # Core business logic and integrations
+│   ├── access.ts                     # Tier entitlements & permission guard logic
+│   ├── api.ts                        # HTTP & WebSocket API client
+│   ├── biometricUnlock.ts            # Hardware biometric verification
+│   ├── domainContext.ts              # Domain and locale resolver
+│   ├── firebaseGoogleAuth.ts         # Google Sign-In & token handling
+│   ├── firebaseWebPush.ts            # Web push messaging & registration
+│   ├── i18n.ts                       # Multi-language internationalization
+│   ├── nativeHealthSync.ts           # Apple HealthKit & Android Health Connect drivers
+│   ├── navigation.ts                 # Type-safe router wrappers
+│   └── workout-plans.ts              # Routine and split computation logic
+├── public/                           # Static assets, legal documents, manifest & SW
+├── scripts/                          # PWA optimization & localization audit scripts
+└── tests/                            # Node.js automated test suites
+```
+
+---
+
+## Security & Device Permissions
+
+- **Biometric Security**: Protects existing user sessions using `expo-local-authentication`. Biometric signatures never leave the device hardware enclave.
+- **Apple HealthKit (`NSHealthShareUsageDescription`)**: Read-only scopes for active calories, heart rate, resting energy, steps, and sleep analysis.
+- **Health Connect**: Granular read/write permissions for Android Health Connect APIs.
+- **Microphone & Audio**: Used for rest timers and audio workouts.
+
+---
+
+## License
+
+This repository and all associated assets are proprietary and confidential. Unauthorized copying, distribution, or reproduction is strictly prohibited.
