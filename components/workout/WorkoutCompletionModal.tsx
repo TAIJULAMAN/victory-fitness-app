@@ -27,7 +27,7 @@ import {
   updateCompletionCardUpsellState,
 } from '../../lib/api';
 
-const UPGRADE_RATE_LIMIT_MS = 48 * 60 * 60 * 1000; // 48 hours
+const UPGRADE_RATE_LIMIT_MS = 48 * 60 * 60 * 1000;
 const UPGRADE_LAST_SHOWN_KEY = '@victory_upgrade_offer_shown';
 const CONFETTI_COLORS = ['#EF4444', '#EAB308', '#22C55E', '#FFFFFF'];
 
@@ -112,7 +112,6 @@ export default function WorkoutCompletionModal({
   const { t } = useLanguage();
   const router = useRouter();
 
-  // Feedback State
   const [difficulty, setDifficulty] = useState<'too_easy' | 'just_right' | 'too_hard'>('just_right');
   const [energy, setEnergy] = useState<'low' | 'medium' | 'high'>('high');
   const [painFlag, setPainFlag] = useState(false);
@@ -126,7 +125,6 @@ export default function WorkoutCompletionModal({
   const [userIdentityStatement, setUserIdentityStatement] = useState<string | null>(null);
   const [completionCardRecordId, setCompletionCardRecordId] = useState<string | null>(null);
 
-  // Check Section 17.1 upgrade offer eligibility & Section 20.3 Identity statement
   useEffect(() => {
     if (!visible) return;
     setUpgradeOffer(null);
@@ -144,7 +142,6 @@ export default function WorkoutCompletionModal({
       .catch(() => undefined);
 
     const checkUpgradeEligibility = async () => {
-      // 1. Never on first-ever workout
       if (totalCompletedWorkouts <= 1) {
         setUpgradeOffer(null);
         return;
@@ -153,7 +150,6 @@ export default function WorkoutCompletionModal({
       try {
         const user = await fetchCurrentUser();
         const tier = String(user?.subscription_tier || '').toUpperCase();
-        // Section 17.1 Trigger: Silver or Gold users not yet at next tier
         if (tier !== 'SILVER' && tier !== 'GOLD') {
           setUpgradeOffer(null);
           return;
@@ -174,7 +170,6 @@ export default function WorkoutCompletionModal({
           return;
         }
 
-        // Prompt content: 'You just finished workout #{streak_count}. Unlock unlimited AI coaching to keep this going.'
         const streakCount = Math.max(Number(user?.workouts_completed || user?.streak_days || totalCompletedWorkouts || 1), 1);
         const title = cardRecord.upsell.title || t('Keep this streak moving');
         const message = cardRecord.upsell.message || `${t('You just finished workout #')}${streakCount}. ${t('Unlock unlimited AI coaching to keep this going.')}`;

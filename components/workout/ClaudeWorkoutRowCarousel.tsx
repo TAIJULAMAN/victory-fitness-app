@@ -96,7 +96,6 @@ export default function ClaudeWorkoutRowCarousel({
     }
   };
 
-  // Mouse drag-to-slide handlers for web
   const handleMouseDown = (e: any) => {
     if (Platform.OS !== 'web') return;
     isMouseDown.current = true;
@@ -131,7 +130,6 @@ export default function ClaudeWorkoutRowCarousel({
     );
   };
 
-  // Mouse wheel horizontal scroll handler for web
   React.useEffect(() => {
     if (Platform.OS !== 'web') return;
     const node = getDomNode();
@@ -357,7 +355,6 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingBottom: 4,
   },
-  // Program card styles
   programCard: {
     width: 158,
     flexShrink: 0,
@@ -430,7 +427,6 @@ const styles = StyleSheet.create({
     color: 'rgba(247, 243, 238, 0.45)',
     marginTop: 7,
   },
-  // Workout card styles
   workoutCard: {
     width: 196,
     flexShrink: 0,

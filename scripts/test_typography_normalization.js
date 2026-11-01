@@ -1,8 +1,3 @@
-/**
- * Typography Normalization Validation Script
- * Verifies that the normalized typography system is applied consistently
- * across all requested mobile app screens and components.
- */
 const fs = require('fs');
 const path = require('path');
 
@@ -55,7 +50,6 @@ console.log('--- Victory Fitness Typography Normalization Audit ---');
 
 let totalIssues = 0;
 
-// 1. Verify Typography.ts exports
 const typographyContent = fs.readFileSync(path.join(APP_DIR, 'constants/Typography.ts'), 'utf8');
 if (!typographyContent.includes("heading: 'DMSans-SemiBold'") && !typographyContent.includes('Fonts.heading')) {
   console.error('[FAIL] Typography.ts must define DMSans-SemiBold for heading tokens');
@@ -64,7 +58,6 @@ if (!typographyContent.includes("heading: 'DMSans-SemiBold'") && !typographyCont
   console.log('[PASS] Typography.ts defines consistent DMSans-SemiBold hierarchy tokens');
 }
 
-// 2. Check each target component for unnormalized ClashDisplay-Bold or fat faux-bold font definitions
 for (const relPath of filesToInspect) {
   const fullPath = path.join(APP_DIR, relPath);
   if (!fs.existsSync(fullPath)) {
@@ -75,10 +68,8 @@ for (const relPath of filesToInspect) {
 
   const content = fs.readFileSync(fullPath, 'utf8');
 
-  // Skip constants/Typography.ts from checking CLASH definition
   if (relPath === 'constants/Typography.ts') continue;
 
-  // Check if component defines CLASH with ClashDisplay-Bold
   if (/default:\s*['"]ClashDisplay-Bold['"]/.test(content)) {
     console.error(`[FAIL] ${relPath} still defines default: 'ClashDisplay-Bold'`);
     totalIssues++;

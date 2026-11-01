@@ -1,19 +1,3 @@
-/**
- * Validation script for Victory Fitness Notification Management Flow
- *
- * Verifies:
- * 1. 1 notification deletion (single delete preserved)
- * 2. Selection mode toggle (Select -> Cancel)
- * 3. Multiple selection individual toggling
- * 4. Select All / Deselect All toggling
- * 5. Delete Selected bulk action
- * 6. Delete All bulk action
- * 7. Unread count calculation & instant update
- * 8. Refresh persistence & cache invalidation
- * 9. Destructive action confirmation gating
- * 10. Mark all as read action & instantaneous unread count clearing
- * 11. Mark selected as read action in selection mode
- */
 
 import { AppNotification } from '../lib/api';
 
@@ -111,7 +95,6 @@ class NotificationScreenModel {
     }
   }
 
-  // Single delete (existing behavior preserved)
   removeNotification(id: string) {
     this.pushNotifications = this.pushNotifications.filter((n) => n.id !== id);
     this.activityNotifications = this.activityNotifications.filter((n) => n.id !== id);
@@ -120,7 +103,6 @@ class NotificationScreenModel {
     this.cacheInvalidated = true;
   }
 
-  // Mark all as read
   handleMarkAllRead() {
     if (this.isMarkingRead || this.unreadCount === 0) return;
     this.pushNotifications = this.pushNotifications.map((n) => ({ ...n, read: true }));
@@ -128,7 +110,6 @@ class NotificationScreenModel {
     this.cacheInvalidated = true;
   }
 
-  // Mark selected as read
   handleMarkSelectedRead() {
     if (this.selectedIds.size === 0 || this.isMarkingRead) return;
     const selected = new Set(this.selectedIds);
@@ -147,7 +128,6 @@ class NotificationScreenModel {
   requestBulkDelete(mode: 'selected' | 'all') {
     if (mode === 'selected' && this.selectedIds.size === 0) return;
     if (mode === 'all' && this.totalCount === 0) return;
-    // Must trigger confirmation prompt
     this.bulkConfirmAction = mode;
   }
 
@@ -181,7 +161,6 @@ class NotificationScreenModel {
   }
 
   refresh(serverData: { push: AppNotification[]; activity: ActivityNotification[] }) {
-    // If cache was invalidated, fetch takes latest server state
     this.pushNotifications = [...serverData.push];
     this.activityNotifications = [...serverData.activity];
   }
@@ -193,11 +172,9 @@ function assertEq(actual: unknown, expected: unknown, msg: string) {
   }
 }
 
-// =================== RUN TESTS ===================
 
 const model = new NotificationScreenModel();
 
-// TEST 1: Initial state & Unread count calculation
 console.log('Test 1: Initial state & Unread count');
 console.log(`Initial total notifications: ${model.totalCount}`);
 console.log(`Initial unread count: ${model.unreadCount}`);
@@ -205,9 +182,7 @@ assertEq(model.totalCount, 5, 'Initial total notifications');
 assertEq(model.unreadCount, 4, 'Initial unread count');
 console.log('✓ PASS: Initial state & unread count correct\n');
 
-// TEST 2: Single delete notification
 console.log('Test 2: Single notification delete (existing flow preserved)');
-// Delete p1 (unread)
 model.removeNotification('p1');
 console.log(`After deleting p1: total=${model.totalCount}, unread=${model.unreadCount}`);
 assertEq(model.totalCount, 4, 'Total after deleting p1');
@@ -217,13 +192,11 @@ if (!model.cacheInvalidated) {
 }
 console.log('✓ PASS: Single notification delete preserved and updates unread count\n');
 
-// TEST 3: Enter select mode & multiple selection
 console.log('Test 3: Select mode & multiple selection');
 model.reset();
 model.toggleSelectMode();
 assertEq(model.isSelectMode, true, 'isSelectMode');
 
-// Select p1 and a1
 model.toggleItemSelection('p1');
 model.toggleItemSelection('a1');
 console.log(`Selected count: ${model.selectedIds.size}`);
@@ -234,33 +207,27 @@ if (!model.selectedIds.has('p1') || !model.selectedIds.has('a1')) {
 assertEq(model.isAllSelected, false, 'isAllSelected when partial');
 console.log('✓ PASS: Multiple selection toggles individual items\n');
 
-// TEST 4: Select All & Deselect All
 console.log('Test 4: Select All and Deselect All');
 model.handleSelectAllToggle();
 console.log(`After Select All: selected=${model.selectedIds.size}, isAllSelected=${model.isAllSelected}`);
 assertEq(model.selectedIds.size, 5, 'selected after Select All');
 assertEq(model.isAllSelected, true, 'isAllSelected after Select All');
 
-// Deselect All
 model.handleSelectAllToggle();
 console.log(`After Deselect All: selected=${model.selectedIds.size}, isAllSelected=${model.isAllSelected}`);
 assertEq(model.selectedIds.size, 0, 'selected after Deselect All');
 assertEq(model.isAllSelected, false, 'isAllSelected after Deselect All');
 console.log('✓ PASS: Select All and Deselect All work correctly\n');
 
-// TEST 5: Delete Selected with confirmation prompt gating
 console.log('Test 5: Delete Selected (confirmation prompt gated)');
 model.reset();
 model.toggleSelectMode();
-// Select p1 (unread) and p2 (read) -> 2 items selected
 model.toggleItemSelection('p1');
 model.toggleItemSelection('p2');
 
-// Request deletion
 model.requestBulkDelete('selected');
 assertEq(model.bulkConfirmAction, 'selected', 'bulkConfirmAction');
 
-// Confirm deletion
 model.confirmExecuteBulkDelete();
 console.log(`After Delete Selected: total=${model.totalCount}, unread=${model.unreadCount}`);
 assertEq(model.totalCount, 3, 'Total after Delete Selected');
@@ -268,21 +235,17 @@ assertEq(model.unreadCount, 3, 'Unread after Delete Selected');
 assertEq(model.selectedIds.size, 0, 'selectedIds after Delete Selected');
 console.log('✓ PASS: Delete Selected removes selected notifications and updates unread count\n');
 
-// TEST 6: Delete All with confirmation prompt gating
 console.log('Test 6: Delete All (confirmation prompt gated)');
 model.reset();
 model.toggleSelectMode();
 
-// Request Delete All
 model.requestBulkDelete('all');
 assertEq(model.bulkConfirmAction, 'all', 'bulkConfirmAction for all');
 
-// Cancel first to verify safety
 model.cancelBulkDelete();
 assertEq(model.bulkConfirmAction, null, 'bulkConfirmAction after cancel');
 assertEq(model.totalCount, 5, 'Total after cancel');
 
-// Request and confirm
 model.requestBulkDelete('all');
 model.confirmExecuteBulkDelete();
 console.log(`After Delete All: total=${model.totalCount}, unread=${model.unreadCount}`);
@@ -291,23 +254,19 @@ assertEq(model.unreadCount, 0, 'Unread after Delete All');
 assertEq(model.isSelectMode, false, 'isSelectMode after Delete All');
 console.log('✓ PASS: Delete All clears all notifications and exits select mode\n');
 
-// TEST 7: Refresh persistence & cache invalidation
 console.log('Test 7: Refresh persistence & cache invalidation');
 model.reset();
-// User deletes p1 and p3 (both unread)
 model.toggleSelectMode();
 model.toggleItemSelection('p1');
 model.toggleItemSelection('p3');
 model.requestBulkDelete('selected');
 model.confirmExecuteBulkDelete();
 
-// Simulate server state where backend deleted p1 and p3
 const serverDatabaseState = {
   push: model.pushNotifications,
   activity: model.activityNotifications,
 };
 
-// Simulate user pulling to refresh
 model.refresh(serverDatabaseState);
 console.log(`After refresh: total=${model.totalCount}, unread=${model.unreadCount}`);
 if (model.totalCount !== 3 || model.unreadCount !== 2) {
@@ -319,7 +278,6 @@ if (remainingPushIds.includes('p1') || remainingPushIds.includes('p3')) {
 }
 console.log('✓ PASS: Deleted notifications do not return after refresh (persistence verified)\n');
 
-// TEST 8: Mark all as read
 console.log('Test 8: Mark all as read');
 model.reset();
 assertEq(model.unreadCount, 4, 'Unread count before mark all read');
@@ -331,12 +289,10 @@ assertEq(model.pushNotifications.every((n) => n.read), true, 'All push notificat
 assertEq(model.readActivityIds.size, 2, 'All activity notifications marked read');
 console.log('✓ PASS: Mark all as read clears unread state while keeping notifications\n');
 
-// TEST 9: Mark selected as read in select mode
 console.log('Test 9: Mark selected as read in select mode');
 model.reset();
 assertEq(model.unreadCount, 4, 'Unread count before mark selected read');
 model.toggleSelectMode();
-// Select p1 (unread) and a1 (unread)
 model.toggleItemSelection('p1');
 model.toggleItemSelection('a1');
 assertEq(model.selectedIds.size, 2, '2 items selected');

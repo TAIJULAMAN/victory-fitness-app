@@ -48,7 +48,6 @@ export default function SubscriptionManagementModal({
   const [catalogPlans, setCatalogPlans] = useState<SubscriptionPlan[]>([]);
   const [actionLoading, setActionLoading] = useState(false);
 
-  // Sub-modals
   const [showChangePlanModal, setShowChangePlanModal] = useState(false);
   const [showPauseModal, setShowPauseModal] = useState(false);
   const [selectedPlanToChange, setSelectedPlanToChange] = useState<string>('gold');

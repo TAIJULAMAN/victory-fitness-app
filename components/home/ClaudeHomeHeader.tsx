@@ -26,7 +26,6 @@ export default function ClaudeHomeHeader({
   const { colors, isDark } = useTheme();
   const { language, t } = useLanguage();
 
-  // Format today's date localized
   const formattedDate = React.useMemo(() => {
     const d = new Date();
     try {

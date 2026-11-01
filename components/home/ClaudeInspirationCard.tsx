@@ -48,7 +48,6 @@ export default function ClaudeInspirationCard({
     };
   }, []);
 
-  // Ensure daily inspiration is always displayed in English without quotation marks
   const cleanQuoteText = (quote.text || '')
     .trim()
     .replace(/^["“'”\s]+|["“'”\s]+$/g, '')

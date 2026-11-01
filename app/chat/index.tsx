@@ -212,7 +212,6 @@ function FormattedCoachMessage({ text }: { text: string }) {
       {lines.map((rawLine, lineIdx) => {
         const trimmed = rawLine.trim();
 
-        // Empty line -> spacer
         if (!trimmed) {
           return <View key={`sp-${lineIdx}`} style={styles.lineSpacer} />;
         }
@@ -240,7 +239,6 @@ function FormattedCoachMessage({ text }: { text: string }) {
           );
         }
 
-        // Markdown headings: ### / ## / #
         if (/^#{1,3}\s+/.test(trimmed)) {
           const headingText = trimmed.replace(/^#{1,3}\s+/, '');
           return (
@@ -250,7 +248,6 @@ function FormattedCoachMessage({ text }: { text: string }) {
           );
         }
 
-        // Section header wrapped in bold: **Heading:** or **Heading**
         const boldHeaderMatch = trimmed.match(/^\*\*(.+?)\*\*:?$/);
         if (boldHeaderMatch) {
           return (
@@ -262,7 +259,6 @@ function FormattedCoachMessage({ text }: { text: string }) {
           );
         }
 
-        // Numbered list item: 1. Item or 1. **Title** description
         const numberedMatch = rawLine.match(/^(\s*)(\d+)\.\s+(.*)$/);
         if (numberedMatch) {
           const num = numberedMatch[2];
@@ -281,7 +277,6 @@ function FormattedCoachMessage({ text }: { text: string }) {
           );
         }
 
-        // Bullet item: - item or * item or • item (with possible indentation)
         const bulletMatch = rawLine.match(/^(\s*)(?:[-*•])\s+(.*)$/);
         if (bulletMatch) {
           const isIndented = bulletMatch[1].length >= 2;
@@ -301,7 +296,6 @@ function FormattedCoachMessage({ text }: { text: string }) {
           );
         }
 
-        // Regular paragraph
         return (
           <Text key={`p-${lineIdx}`} style={styles.paragraph}>
             {parseInlineMarkdown(rawLine, styles.coachBubbleText, `p-${lineIdx}`)}
@@ -528,7 +522,6 @@ export default function ClaudeCoachScreen() {
     options: ChatSendOptions;
   } | null>(null);
 
-  // Auto-reset content height when input is cleared
   useEffect(() => {
     if (!inputText) {
       setContentHeight(38);
@@ -562,7 +555,6 @@ export default function ClaudeCoachScreen() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
 
-  // Horizontal mouse-drag and wheel scrolling for Quick Prompts
   const promptScrollRef = useRef<ScrollView>(null);
   const isPromptMouseDown = useRef(false);
   const promptStartX = useRef(0);
@@ -688,8 +680,6 @@ export default function ClaudeCoachScreen() {
               : undefined,
           } satisfies ChatMessage));
 
-        // Local messages retain rich plan cards; server history remains the
-        // fallback for a new device or a cleared local cache.
         if (!locallyStoredMessages.length && serverMessages.length) {
           setMessages(serverMessages);
         }
@@ -750,7 +740,6 @@ export default function ClaudeCoachScreen() {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
 
-    // Call live backend or smart fallback
     try {
       let assistantText = '';
       let planAction: CoachWorkoutPlanAction | null = null;
@@ -866,8 +855,6 @@ export default function ClaudeCoachScreen() {
     autoPromptHandledRef.current = true;
     const prescriptionOptions = buildPrescriptionOptionsFromParams();
 
-    // Route params are launch-only data. Consuming them prevents an old Home
-    // workout prompt from appearing when this chat route is opened again.
     router.setParams({
       initialPrompt: undefined,
       autoSend: undefined,
@@ -1020,7 +1007,6 @@ export default function ClaudeCoachScreen() {
     setSending(false);
   };
 
-  // If Silver tier, show the locked paywall teaser per prototype
   if (!hasCoach) {
     return (
       <View style={styles.container}>
@@ -2025,7 +2011,6 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: OBSIDIAN,
   },
-  // Locked styles for Silver
   lockedContainer: {
     flex: 1,
     paddingHorizontal: 28,

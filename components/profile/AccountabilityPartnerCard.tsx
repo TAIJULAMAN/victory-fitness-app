@@ -38,7 +38,6 @@ export default function AccountabilityPartnerCard({ onStatusChange }: Accountabi
   const [nudging, setNudging] = useState(false);
   const [unpairing, setUnpairing] = useState(false);
 
-  // Invite / Accept Modal State
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');

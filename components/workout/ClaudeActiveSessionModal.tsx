@@ -136,13 +136,11 @@ export default function ClaudeActiveSessionModal({
     setSeconds(0);
   }, [workoutTitle, exercises]);
 
-  // Synchronize exercise weight & reps when moving between exercises
   useEffect(() => {
     setWeightKg(currentExercise?.defaultKg || 0);
     setReps(currentExercise?.targetReps || 1);
   }, [currentExIdx, currentExercise]);
 
-  // Session clock timer
   useEffect(() => {
     if (!visible) return;
     const interval = setInterval(() => {
@@ -206,15 +204,12 @@ export default function ClaudeActiveSessionModal({
     setLoggedSets(newLogged);
     setRestRemainingSeconds(currentExercise.restSeconds || 0);
 
-    // If more sets remain in this exercise
     if (currentSetIdx < currentExercise.targetSets - 1) {
       setCurrentSetIdx((prev) => prev + 1);
     } else if (currentExIdx < sessionExercises.length - 1) {
-      // Advance to next exercise
       setCurrentExIdx((prev) => prev + 1);
       setCurrentSetIdx(0);
     } else {
-      // Completed last exercise
       handleFinish(newLogged);
     }
   };
@@ -290,7 +285,6 @@ export default function ClaudeActiveSessionModal({
     });
   };
 
-  // Button text matching prototype
   const setCtaText =
     !currentExercise
       ? t('Finish workout')

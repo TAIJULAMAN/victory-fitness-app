@@ -6,12 +6,10 @@ import {
 } from '../lib/challengeTerminology';
 import { STATIC_TRANSLATIONS } from '../lib/translations';
 
-// Verify that STATIC_TRANSLATIONS for German works for UI keys
 const deDict = STATIC_TRANSLATIONS.de || {};
 
 console.log('--- Testing Canonical Challenge Terminology ---');
 
-// 1. Initial known challenges
 const testTitles = [
   '21-Day Gold Beta',
   '21-day gold beta',
@@ -31,7 +29,6 @@ for (const title of testTitles) {
   }
 }
 
-// 2. Excluded UI keys must NOT be classified as challenge titles
 const uiKeys = [
   'Challenge',
   'Challenges',
@@ -53,7 +50,6 @@ for (const key of uiKeys) {
   }
 }
 
-// 3. Dynamic registration of arbitrary challenge titles
 const dynamicTitle = 'Winter Solstice 14-Day Peak';
 console.log(`Unregistered dynamic: "${dynamicTitle}" -> isCanonical: ${isCanonicalChallengeTitle(dynamicTitle)}`);
 registerCanonicalChallengeTitle(dynamicTitle);
@@ -62,13 +58,10 @@ if (!isCanonicalChallengeTitle(dynamicTitle)) {
 }
 console.log(`Registered dynamic: "${dynamicTitle}" -> isCanonical: ${isCanonicalChallengeTitle(dynamicTitle)}`);
 
-// 4. Simulate translation behavior for German vs English
 function mockTranslate(language: 'en' | 'de', text: string): string {
-  // If canonical challenge title, must stay in canonical English
   if (isCanonicalChallengeTitle(text)) {
     return canonicalizeChallengeTitle(text);
   }
-  // Otherwise translate from locale dictionary
   if (language === 'de') {
     return deDict[text] || text;
   }

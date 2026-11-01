@@ -7,9 +7,6 @@ import { useLanguage } from '../../lib/i18n';
 import { Colors } from '../../constants/Colors';
 import { Fonts } from '../../constants/Typography';
 
-// Curated pool of version release quotes.
-// Guarantees each app release version has an inspiring, deterministic quote
-// that remains static throughout usage and updates ONLY when a new app version is released.
 const VERSION_RELEASE_QUOTES: Array<{ text: string; author: string }> = [
   { text: 'Every rep is a vote for the person you are becoming.', author: 'Victory Fitness' },
   { text: 'Consistency is what transforms average into excellence.', author: 'Victory Fitness' },
@@ -43,7 +40,6 @@ export default function GreetingCard() {
 
     const loadVersionQuote = async () => {
       try {
-        // 1. Instant render from local cache if available
         const cached = await AsyncStorage.getItem(QUOTE_CACHE_KEY);
         if (cached) {
           const parsed = JSON.parse(cached);
@@ -52,7 +48,6 @@ export default function GreetingCard() {
           }
         }
 
-        // 2. Fetch current live quote selected by admin from backend
         const remoteQuote = await fetchHomepageQuote(APP_VERSION);
         if (isMounted && remoteQuote?.text && remoteQuote.author) {
           const quoteObj = { text: remoteQuote.text, author: remoteQuote.author };
@@ -61,7 +56,6 @@ export default function GreetingCard() {
           return;
         }
 
-        // 3. Fallback to the release-deterministic quote if offline or unseeded
         if (isMounted) {
           await AsyncStorage.setItem(QUOTE_CACHE_KEY, JSON.stringify(defaultVersionQuote));
         }

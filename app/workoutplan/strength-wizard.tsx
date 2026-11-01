@@ -96,7 +96,6 @@ export default function StrengthWizard() {
           setHasProfileSync(true);
         }
 
-        // Map goal
         let defaultGoal = '';
         const rawGoal = String(anamnese?.primaryGoal || (user as any)?.fitness_goal || '').toLowerCase();
         if (rawGoal.includes('muscle') || rawGoal.includes('hypertrophy') || rawGoal.includes('build')) {
@@ -109,7 +108,6 @@ export default function StrengthWizard() {
           defaultGoal = '4';
         }
 
-        // Map level
         let defaultLevel = '';
         const rawLevel = String(anamnese?.activityLevel || (user as any)?.fitness_level || '').toLowerCase();
         if (rawLevel.includes('sedentary') || rawLevel.includes('beginner') || rawLevel.includes('light')) {
@@ -120,19 +118,16 @@ export default function StrengthWizard() {
           defaultLevel = 'INTERMEDIATE';
         }
 
-        // Map frequency & days
         let defaultFreq = '4';
         const matchDays = String(anamnese?.daysPerWeek || '').match(/(\d+)/);
         if (matchDays) {
           defaultFreq = String(Math.max(3, Math.min(5, parseInt(matchDays[1], 10))));
         }
 
-        // Map split
-        let defaultSplit = '2'; // UPPER / LOWER
-        if (defaultFreq === '3') defaultSplit = '1'; // FULL BODY
-        else if (defaultFreq === '5') defaultSplit = '3'; // PUSH PULL LEGS
+        let defaultSplit = '2';
+        if (defaultFreq === '3') defaultSplit = '1';
+        else if (defaultFreq === '5') defaultSplit = '3';
 
-        // Map default days
         const daysMap: Record<string, string[]> = {
           '3': ['Monday', 'Wednesday', 'Friday'],
           '4': ['Monday', 'Tuesday', 'Thursday', 'Friday'],
@@ -140,7 +135,6 @@ export default function StrengthWizard() {
         };
         const defaultDays = daysMap[defaultFreq] || ['Monday', 'Tuesday', 'Thursday', 'Friday'];
 
-        // Map equipment
         let defaultEquipment: string[] = [];
         const rawEquip = String(anamnese?.equipmentAccess || (user as any)?.equipmentAccess || '').toLowerCase();
         if (rawEquip.includes('no equipment') || rawEquip.includes('none') || rawEquip.includes('bodyweight') || rawEquip.includes('outdoors')) {
@@ -244,11 +238,9 @@ export default function StrengthWizard() {
     const current = formData[key] || [];
     if (key === 'equipment') {
       if (value === 'bodyweight') {
-        // Bodyweight only chosen: clear gym equipment
         updateData('equipment', current.includes('bodyweight') ? [] : ['bodyweight']);
         return;
       }
-      // Gym equipment chosen: remove 'bodyweight'
       const nonBw = current.filter((v: any) => v !== 'bodyweight');
       if (nonBw.includes(value)) {
         updateData('equipment', nonBw.filter((v: any) => v !== value));

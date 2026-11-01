@@ -470,7 +470,6 @@ async function collectHealthConnectMetrics(startFrom?: string | Date | null, loo
   const sourceDevice = 'Health Connect';
   const metrics: NormalizedHealthMetricPayload[] = [];
 
-  // Fetch continuous and sample-based metrics in parallel
   const [
     heartRateRecords,
     hrvRecords,
@@ -483,7 +482,6 @@ async function collectHealthConnectMetrics(startFrom?: string | Date | null, loo
     HealthConnect.readRecords('OxygenSaturation', { timeRangeFilter, ascendingOrder: false, pageSize: 50 }),
   ]);
 
-  // Fetch daily aggregates for Steps, ActiveCaloriesBurned, and Distance for each of the last 7 days
   const dailySyncPromises = Array.from({ length: lookbackDays }).map(async (_, i) => {
     const dayStart = new Date();
     dayStart.setHours(0, 0, 0, 0);

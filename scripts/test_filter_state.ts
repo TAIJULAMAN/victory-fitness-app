@@ -1,17 +1,6 @@
-/**
- * Validation test script for Workout and Challenge filter state behavior.
- *
- * Verifies:
- * 1. Default initial state on fresh navigation is collapsed (isExpanded === false).
- * 2. Expanding shows filter options and switches button to Collapse.
- * 3. Selecting filters updates filtered results, active filter counter, and preserved values.
- * 4. Navigating away and back resets tray to collapsed while preserving selected values and results.
- * 5. Challenge filters behave identically to Workout filters.
- */
 
 console.log('=== AUDITING & VALIDATING FILTER STATE ===\n');
 
-// --- 1. Workout Filter State Simulation ---
 interface WorkoutItem {
   id: string;
   name: string;
@@ -29,17 +18,14 @@ const mockWorkouts: WorkoutItem[] = [
 ];
 
 class WorkoutScreenModel {
-  // Filter state
   selectedPurposes: string[] = ['All'];
   selectedDifficulty = 'Any';
   selectedDuration = 'Any';
   selectedKit = 'Any';
   searchQuery = '';
 
-  // Tray state
-  isExpanded: boolean = false; // Fresh navigation MUST start collapsed
+  isExpanded: boolean = false;
 
-  // Lifecycle
   onFreshNavigation() {
     this.isExpanded = false;
   }
@@ -88,7 +74,6 @@ class WorkoutScreenModel {
   }
 }
 
-// --- 2. Challenge Filter State Simulation ---
 interface ChallengeItem {
   id: string;
   name: string;
@@ -106,7 +91,7 @@ const mockChallenges: ChallengeItem[] = [
 class ChallengeScreenModel {
   selectedDay = 'All';
   selectedCat = 'All';
-  isFiltersExpanded: boolean = false; // Fresh navigation MUST start collapsed
+  isFiltersExpanded: boolean = false;
 
   onFreshNavigation() {
     this.isFiltersExpanded = false;
@@ -138,11 +123,9 @@ class ChallengeScreenModel {
   }
 }
 
-// --- EXECUTE WORKOUT TESTS ---
 console.log('--- Testing Workout Screen Filter Flow ---');
 const workoutScreen = new WorkoutScreenModel();
 
-// Step 1: Fresh navigation -> initially collapsed
 console.log('1. Initial navigation into Workout:');
 console.log('   isExpanded:', workoutScreen.isExpanded, '(Expected: false)');
 console.log('   Button text:', workoutScreen.isExpanded ? 'Collapse ▲' : 'Expand ▼');
@@ -150,7 +133,6 @@ if (workoutScreen.isExpanded !== false) {
   throw new Error('Workout filter should be collapsed on initial navigation');
 }
 
-// Step 2: User expands filters
 console.log('2. User taps Expand button:');
 workoutScreen.toggleExpand();
 console.log('   isExpanded:', workoutScreen.isExpanded, '(Expected: true)');
@@ -159,7 +141,6 @@ if (!workoutScreen.isExpanded) {
   throw new Error('Workout filter should be expanded after toggle');
 }
 
-// Step 3: User selects filters
 console.log('3. User selects filters (Upper Body, Intermediate):');
 workoutScreen.selectedPurposes = ['Upper Body'];
 workoutScreen.selectedDifficulty = 'Intermediate';
@@ -170,9 +151,8 @@ if (workoutScreen.getActiveFiltersCount() !== 2 || filteredW.length !== 1 || fil
   throw new Error('Workout filtering did not match expected results');
 }
 
-// Step 4: User navigates away and navigates back
 console.log('4. User navigates away to another screen, then navigates back to Workout:');
-workoutScreen.onFreshNavigation(); // Focus event fires
+workoutScreen.onFreshNavigation();
 console.log('   isExpanded:', workoutScreen.isExpanded, '(Expected: false - collapsed on return)');
 console.log('   Button text:', workoutScreen.isExpanded ? 'Collapse ▲' : 'Expand ▼');
 console.log('   Preserved Active filter count:', workoutScreen.getActiveFiltersCount(), '(Expected: 2)');
@@ -184,7 +164,6 @@ if (workoutScreen.getActiveFiltersCount() !== 2 || workoutScreen.getFilteredWork
   throw new Error('Workout filter selections and results must be preserved on navigation');
 }
 
-// Step 5: User expands again and resets
 console.log('5. User taps Expand and resets:');
 workoutScreen.toggleExpand();
 workoutScreen.resetFilters();
@@ -196,11 +175,9 @@ if (workoutScreen.getActiveFiltersCount() !== 0 || workoutScreen.getFilteredWork
 
 console.log('Workout filter tests PASSED!\n');
 
-// --- EXECUTE CHALLENGE TESTS ---
 console.log('--- Testing Challenge Screen Filter Flow ---');
 const challengeScreen = new ChallengeScreenModel();
 
-// Step 1: Fresh navigation -> initially collapsed
 console.log('1. Initial navigation into Challenge:');
 console.log('   isFiltersExpanded:', challengeScreen.isFiltersExpanded, '(Expected: false)');
 console.log('   Button text:', challengeScreen.isFiltersExpanded ? 'Collapse ▲' : 'Expand ▼');
@@ -208,7 +185,6 @@ if (challengeScreen.isFiltersExpanded !== false) {
   throw new Error('Challenge filter should be collapsed on initial navigation');
 }
 
-// Step 2: User expands filters
 console.log('2. User taps Expand button:');
 challengeScreen.toggleExpand();
 console.log('   isFiltersExpanded:', challengeScreen.isFiltersExpanded, '(Expected: true)');
@@ -217,7 +193,6 @@ if (!challengeScreen.isFiltersExpanded) {
   throw new Error('Challenge filter should be expanded after toggle');
 }
 
-// Step 3: User selects filters
 console.log('3. User selects filters (7 days, Mental):');
 challengeScreen.selectedDay = '7';
 challengeScreen.selectedCat = 'Mental';
@@ -228,9 +203,8 @@ if (challengeScreen.getActiveFiltersCount() !== 2 || filteredC.length !== 1 || f
   throw new Error('Challenge filtering did not match expected results');
 }
 
-// Step 4: User navigates away and navigates back
 console.log('4. User navigates away to another screen, then navigates back to Challenge:');
-challengeScreen.onFreshNavigation(); // Focus event fires
+challengeScreen.onFreshNavigation();
 console.log('   isFiltersExpanded:', challengeScreen.isFiltersExpanded, '(Expected: false - collapsed on return)');
 console.log('   Button text:', challengeScreen.isFiltersExpanded ? 'Collapse ▲' : 'Expand ▼');
 console.log('   Preserved Active filter count:', challengeScreen.getActiveFiltersCount(), '(Expected: 2)');
@@ -242,7 +216,6 @@ if (challengeScreen.getActiveFiltersCount() !== 2 || challengeScreen.getFiltered
   throw new Error('Challenge filter selections and results must be preserved on navigation');
 }
 
-// Step 5: User expands again and resets
 console.log('5. User taps Expand and resets:');
 challengeScreen.toggleExpand();
 challengeScreen.resetFilters();

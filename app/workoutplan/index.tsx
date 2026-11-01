@@ -292,7 +292,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     fontFamily: 'Inter_700Bold',
   },
-  /* Modal Styles */
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.8)',

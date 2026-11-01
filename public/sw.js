@@ -64,9 +64,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Authentication and user data must always come from the network. Caching
-  // same-origin API responses can resurrect stale onboarding/session state and
-  // may expose one user's private response after a local account switch.
   if (url.pathname === '/api' || url.pathname.startsWith('/api/')) {
     event.respondWith(fetch(event.request));
     return;

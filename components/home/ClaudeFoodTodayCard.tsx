@@ -166,7 +166,6 @@ export default function ClaudeFoodTodayCard({
           </Pressable>
         </View>
       ) : (
-        /* Silver locked card */
         <Pressable
           style={[
             styles.lockedCard,

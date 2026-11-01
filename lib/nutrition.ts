@@ -85,7 +85,6 @@ export function calculateProteinTarget(
   const goalStr = String(goal || '').trim().toLowerCase();
 
   let multiplier = 1.6;
-  // Maintenance / normal: minimum approximately 1.6 g/kg
   if (
     goalStr === 'g3' ||
     goalStr.includes('maintenance') ||
@@ -176,8 +175,6 @@ export async function createNutritionPlan(payload: Record<string, unknown>, sign
   const response = await apiRequest<{ plan: NutritionPlanApiResponse }>('/ai/nutrition/plan', {
     method: 'POST',
     body: payload,
-    // Weekly generation can exceed two minutes. Stay below the gateway's
-    // 180-second timeout while allowing completed plans to reach the client.
     timeoutMs: 170_000,
     signal,
   });

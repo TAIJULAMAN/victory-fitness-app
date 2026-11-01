@@ -29,7 +29,6 @@ export default function CoachQuickPromptBar({
   const [contentHeight, setContentHeight] = useState(36);
   const [rotatingIndex, setRotatingIndex] = useState(0);
 
-  // Auto-reset content height when prompt is cleared
   React.useEffect(() => {
     if (!prompt) {
       setContentHeight(36);
@@ -43,7 +42,6 @@ export default function CoachQuickPromptBar({
     return /Mac|iPod|iPhone|iPad/.test(navigator.platform) || /Macintosh/.test(navigator.userAgent);
   }, []);
 
-  // Rotate through the 5 suggestion chips every 3.5s
   React.useEffect(() => {
     const timer = setInterval(() => {
       setRotatingIndex((prev) => (prev + 1) % SUGGESTION_CHIPS.length);

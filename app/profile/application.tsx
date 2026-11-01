@@ -26,7 +26,6 @@ export default function ApplicationScreen() {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
-  // Form State
   const [goal, setGoal] = useState<string | null>(null);
   const [obstacle, setObstacle] = useState<string | null>(null);
   const [investment, setInvestment] = useState<string | null>(null);
@@ -432,7 +431,6 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
 
-  /* Section 1 Hero */
   heroSection: {
     paddingHorizontal: 20,
     paddingTop: 40,
@@ -498,7 +496,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_700Bold',
   },
 
-  /* Section 2 Warning */
   warningSection: {
     paddingHorizontal: 20,
     paddingTop: 40,
@@ -522,7 +519,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_400Regular',
   },
 
-  /* Section 3 Included */
   includedSection: {
     backgroundColor: '#FACC15',
     paddingHorizontal: 20,
@@ -558,7 +554,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 
-  /* Section 4 For You */
   forYouSection: {
     backgroundColor: '#fff',
     paddingHorizontal: 20,
@@ -593,7 +588,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_400Regular',
   },
 
-  /* Section 5 Form */
   formSection: {
     paddingHorizontal: 20,
     paddingTop: 60,
@@ -753,7 +747,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_700Bold',
   },
 
-  /* Footer */
   footer: {
     alignItems: 'center',
     paddingHorizontal: 20,

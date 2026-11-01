@@ -57,7 +57,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const isDark = theme === 'dark';
   const colors = useMemo(() => getThemeColors(theme), [theme]);
 
-  // Sync background on web to avoid white/dark flickering on bounce or borders
   useEffect(() => {
     if (Platform.OS === 'web' && typeof document !== 'undefined') {
       try {

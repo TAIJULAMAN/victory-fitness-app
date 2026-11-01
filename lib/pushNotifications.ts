@@ -144,8 +144,6 @@ function getNativeNotifications(): NotificationsModule {
 export async function registerForPushNotificationsAsync(): Promise<string | null> {
   if (Platform.OS === 'web' || !Constants.isDevice) {
     if (Platform.OS !== 'web') return null;
-    // Browser permission must be requested by the explicit button on the
-    // Notifications screen, not by an app-start effect.
     if (typeof Notification !== 'undefined' && Notification.permission !== 'granted') {
       return null;
     }
@@ -194,9 +192,6 @@ export async function registerForPushNotificationsAsync(): Promise<string | null
 
   const projectId = Constants.expoConfig?.extra?.eas?.projectId;
   const token = (await notifications.getExpoPushTokenAsync(projectId ? { projectId } : undefined)).data;
-  // Register on every authenticated app session. The same device token can
-  // belong to a different account after logout, so a global local-storage
-  // cache can otherwise prevent the new account from receiving pushes.
   await apiRequest('/me/push-token', { method: 'POST', body: { token, platform: Platform.OS } });
   await AsyncStorage.setItem(REGISTERED_TOKEN_KEY, token);
   return token;

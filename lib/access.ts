@@ -186,8 +186,6 @@ export function isGoldTrialActive(
   }
 
   if (String(user.subscription_purchase_source ?? '').trim().toLowerCase() === 'beta_trial') {
-    // The API calculates beta expiry from trial_end_at and returns the
-    // resulting status.  Do not infer expiry from browser storage.
     return String(user.subscription_status ?? '').trim().toUpperCase() === 'ACTIVE';
   }
 

@@ -2531,9 +2531,6 @@ export type AuthResponse = {
   };
 };
 
-// ============================================================
-// Section 20.1: Accountability Partner Pairing
-// ============================================================
 export interface AccountabilityPartnerResponse {
   pair_id?: string | null;
   status: 'active' | 'pending' | 'none';
@@ -2582,9 +2579,6 @@ export async function unpairAccountabilityPartner(pairId: string): Promise<{ suc
   });
 }
 
-// ============================================================
-// Subscription Management & Section 17.1 Profile Upgrade Offer
-// ============================================================
 export interface SubscriptionStatusResponse {
   subscription: {
     tier: string;
@@ -2684,9 +2678,6 @@ export async function updateCompletionCardUpsellState(
   });
 }
 
-// ============================================================
-// Points & Tier Progression Breakdown
-// ============================================================
 export interface PointsBreakdownResponse {
   total_points: number;
   current_tier: string;

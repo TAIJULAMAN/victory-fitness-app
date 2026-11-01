@@ -151,15 +151,12 @@ async function generateStoryCardCanvasAsync(data: {
     const ctx = canvas.getContext('2d');
     if (!ctx) return null;
 
-    // Background: Pure dark obsidian
     ctx.fillStyle = '#0D0D0D';
     ctx.fillRect(0, 0, 1080, 1920);
 
-    // Top 10px Copper accent bar
     ctx.fillStyle = '#B5651D';
     ctx.fillRect(0, 0, 1080, 10);
 
-    // Subtle ambient glow at bottom
     const gradient = ctx.createRadialGradient(540, 1920, 60, 540, 1920, 1000);
     gradient.addColorStop(0, 'rgba(201, 148, 58, 0.22)');
     gradient.addColorStop(0.5, 'rgba(201, 148, 58, 0.08)');
@@ -170,7 +167,6 @@ async function generateStoryCardCanvasAsync(data: {
     const padX = 90;
     let y = 110;
 
-    // Brand logo
     const logoImg = await getLogoElement();
     if (logoImg && logoImg.naturalWidth) {
       const aspect = logoImg.naturalWidth / (logoImg.naturalHeight || 1);
@@ -187,7 +183,6 @@ async function generateStoryCardCanvasAsync(data: {
       y += 75;
     }
 
-    // Row: YOUR VICTORY & Date
     ctx.fillStyle = '#C9943A';
     ctx.font = '600 24px sans-serif';
     ctx.fillText('YOUR VICTORY', padX, y);
@@ -199,13 +194,11 @@ async function generateStoryCardCanvasAsync(data: {
     ctx.textAlign = 'left';
     y += 50;
 
-    // WORKOUT COMPLETE
     ctx.fillStyle = 'rgba(247, 243, 238, 0.55)';
     ctx.font = '600 20px sans-serif';
     ctx.fillText('WORKOUT COMPLETE', padX, y);
     y += 65;
 
-    // Title: Uppercase, wrapped nicely
     ctx.fillStyle = '#F7F3EE';
     ctx.font = '800 48px sans-serif';
     const titleLines = wrapCanvasText(ctx, data.workoutTitle.toUpperCase(), 1080 - padX * 2);
@@ -215,7 +208,6 @@ async function generateStoryCardCanvasAsync(data: {
     }
     y += 12;
 
-    // Orange/copper divider line
     ctx.strokeStyle = 'rgba(181, 101, 29, 0.6)';
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -224,7 +216,6 @@ async function generateStoryCardCanvasAsync(data: {
     ctx.stroke();
     y += 44;
 
-    // Exercises: up to 8-9 with 5px gold bullet dots
     const maxExercises = data.exercises.length <= 9 ? 9 : 8;
     const displayExercises = data.exercises.slice(0, maxExercises);
     const maxExerciseWidth = 1080 - padX * 2 - 45;
@@ -256,11 +247,9 @@ async function generateStoryCardCanvasAsync(data: {
       ctx.fillText('FULL SESSION COMPLETED', padX + 32, y);
     }
 
-    // Bottom metrics section
     let botY = 1380;
     const colWidth = (1080 - padX * 2) / 3;
 
-    // Divider above metrics
     ctx.strokeStyle = 'rgba(247, 243, 238, 0.2)';
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -270,7 +259,6 @@ async function generateStoryCardCanvasAsync(data: {
 
     botY += 45;
 
-    // 1. STREAK
     ctx.fillStyle = 'rgba(247, 243, 238, 0.5)';
     ctx.font = '600 22px sans-serif';
     ctx.fillText('STREAK', padX, botY);
@@ -279,7 +267,6 @@ async function generateStoryCardCanvasAsync(data: {
     ctx.font = '700 64px monospace';
     ctx.fillText(String(data.streakDays), padX, botY + 70);
 
-    // 2. INTENSITY
     ctx.fillStyle = 'rgba(247, 243, 238, 0.5)';
     ctx.font = '600 22px sans-serif';
     ctx.fillText(data.intensityLabel, padX + colWidth, botY);
@@ -288,7 +275,6 @@ async function generateStoryCardCanvasAsync(data: {
     ctx.font = '700 48px sans-serif';
     ctx.fillText(data.intensityValue, padX + colWidth, botY + 70);
 
-    // 3. TIME
     ctx.fillStyle = 'rgba(247, 243, 238, 0.5)';
     ctx.font = '600 22px sans-serif';
     ctx.fillText('TIME', padX + colWidth * 2, botY);
@@ -299,7 +285,6 @@ async function generateStoryCardCanvasAsync(data: {
 
     botY += 155;
 
-    // Coach Box with copper vertical bar
     const quoteLines = wrapCanvasText(ctx, data.coachQuote, 1080 - padX * 2 - 40);
     const quoteHeight = Math.max(80, quoteLines.length * 40 + 35);
 
@@ -324,7 +309,6 @@ async function generateStoryCardCanvasAsync(data: {
 
     botY += quoteHeight + 45;
 
-    // Footer: User Name, App URL & Working QR Box
     ctx.fillStyle = '#F7F3EE';
     ctx.font = '700 32px sans-serif';
     ctx.fillText(data.userName, padX, botY + 12);
@@ -333,7 +317,6 @@ async function generateStoryCardCanvasAsync(data: {
     ctx.font = '600 22px monospace';
     ctx.fillText('VICTORY-FITNESS.APP', padX, botY + 48);
 
-    // Real, Scannable QR Code
     try {
       const qr = QRCode.create(data.workoutUrl, { errorCorrectionLevel: 'M' });
       const qrBoxSize = 136;
@@ -483,7 +466,6 @@ export default function ClaudeSessionCompleteModal({
     }
   };
 
-  // Coach feedback calculation matching prototype lines 3140-3160
   const hasShoulder = selectedPains.includes('Shoulder') || noteText.length > 0;
   const coachFeedbackText = (() => {
     if (selectedRpe === 0) {
@@ -658,7 +640,6 @@ export default function ClaudeSessionCompleteModal({
         return;
       }
 
-      // Check modern Web Share API with file attachment (Mobile Safari, Chrome on Android, etc.)
       if (Platform.OS === 'web' && fileObj && typeof navigator !== 'undefined' && (navigator as any).canShare && (navigator as any).canShare({ files: [fileObj] })) {
         try {
           await (navigator as any).share({
@@ -672,7 +653,6 @@ export default function ClaudeSessionCompleteModal({
         }
       }
 
-      // Native React Native sharing with file attachment
       if (Platform.OS !== 'web' && nativeUri && (await Sharing.isAvailableAsync())) {
         await Sharing.shareAsync(nativeUri, {
           mimeType: 'image/png',
@@ -682,7 +662,6 @@ export default function ClaudeSessionCompleteModal({
         return;
       }
 
-      // Desktop web fallbacks (auto-download 1080x1920 PNG and open platform)
       if (fileBlob) {
         downloadBlob(fileBlob, fileName);
       }
@@ -733,7 +712,6 @@ export default function ClaudeSessionCompleteModal({
     <Modal visible={visible} animationType="slide" transparent={false}>
       <View style={styles.container}>
         {step === 'feedback' ? (
-          /* Step 1: Feedback Form matching prototype lines 622-660 */
           <ScrollView
             contentContainerStyle={styles.feedbackScroll}
             showsVerticalScrollIndicator={false}
@@ -831,7 +809,6 @@ export default function ClaudeSessionCompleteModal({
             </Pressable>
           </ScrollView>
         ) : (
-          /* Step 2: Complete Screen matching Reference Images 1 & 2 + Prototype lines 661-820 */
           <ScrollView contentContainerStyle={styles.completeScroll} showsVerticalScrollIndicator={false}>
             {/* Top Status Badge matching Image 1: Green circle with white tick + label */}
             <View style={styles.statusRow}>
@@ -1352,7 +1329,6 @@ const styles = StyleSheet.create({
     color: 'rgba(247, 243, 238, 0.55)',
   },
 
-  /* Step 2: Complete Screen Styles */
   completeScroll: {
     paddingHorizontal: 20,
     paddingTop: 66,
@@ -1426,7 +1402,6 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
-  /* WHAT YOU DID section */
   whatYouDidSection: {
     marginTop: 20,
   },
@@ -1466,7 +1441,6 @@ const styles = StyleSheet.create({
     color: 'rgba(247, 243, 238, 0.55)',
   },
 
-  /* Silver video chapters fallback */
   silverChaptersBox: {
     backgroundColor: NAVY,
     borderRadius: 18,
@@ -1520,7 +1494,6 @@ const styles = StyleSheet.create({
     color: 'rgba(247, 243, 238, 0.5)',
   },
 
-  /* WORTH READING TWICE */
   readTwiceCard: {
     marginTop: 22,
     backgroundColor: NAVY,
@@ -1567,7 +1540,6 @@ const styles = StyleSheet.create({
     color: IVORY,
   },
 
-  /* WHAT YOUR COACH TOOK FROM THAT */
   coachReadCard: {
     marginTop: 12,
     backgroundColor: NAVY,
@@ -1617,7 +1589,6 @@ const styles = StyleSheet.create({
     color: 'rgba(247, 243, 238, 0.78)',
   },
 
-  /* 9:16 SHARE CARD SECTION */
   shareCardContainer: {
     marginTop: 20,
   },
@@ -1945,7 +1916,6 @@ const styles = StyleSheet.create({
     color: 'rgba(247, 243, 238, 0.8)',
   },
 
-  /* Upsell Card */
   upsellCard: {
     marginTop: 16,
     borderRadius: 16,
@@ -1994,7 +1964,6 @@ const styles = StyleSheet.create({
     color: GOLD,
   },
 
-  /* Done Button */
   doneBtn: {
     marginTop: 22,
     height: 54,

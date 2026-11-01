@@ -273,7 +273,6 @@ export default function ClaudeInnerCircleApplyModal({
               </Text>
             </>
           ) : (
-            /* Confirmation: It's with Victor now matching lines 1418-1433 */
             <View style={styles.confirmationWrap}>
               <View style={styles.greenCheckCircle}>
                 <View style={styles.checkmarkTick} />

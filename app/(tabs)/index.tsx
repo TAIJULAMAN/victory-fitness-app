@@ -261,7 +261,6 @@ export default function HomeScreen() {
   const [hydration, setHydration] = useState<HydrationState | null>(null);
   const [accountabilityPartner, setAccountabilityPartner] = useState<AccountabilityPartnerResponse | null>(null);
 
-  // Workout Plan Detail, Active Workout, and Completion Modals
   const [planDetailVisible, setPlanDetailVisible] = useState(false);
   const [vimeoModalVisible, setVimeoModalVisible] = useState(false);
   const [activeSessionVisible, setActiveSessionVisible] = useState(false);
@@ -273,20 +272,17 @@ export default function HomeScreen() {
   });
   const [sessionCompletedExercises, setSessionCompletedExercises] = useState<Array<{ name: string; s?: string; cardN?: string; type?: string }>>([]);
 
-  // Challenge Detail and Cohort Modals
   const [challengeDetailVisible, setChallengeDetailVisible] = useState(false);
   const [cohortModalVisible, setCohortModalVisible] = useState(false);
   const [selectedChallengeDetail, setSelectedChallengeDetail] = useState<any | null>(null);
   const [inviteModalVisible, setInviteModalVisible] = useState(false);
 
-  // Weight check-in prompt
   const [weightPromptVisible, setWeightPromptVisible] = useState(false);
   const [weightPromptEditing, setWeightPromptEditing] = useState(false);
   const [weightPromptSaving, setWeightPromptSaving] = useState(false);
   const [weightDraft, setWeightDraft] = useState('');
   const [weightPromptUserId, setWeightPromptUserId] = useState('');
 
-  // Custom 6-week plan state (Claude Prototype VF Prototype.dc.html lines 188-199 & 3234-3243)
   const [planBuilt, setPlanBuilt] = useState(false);
   const [showFreshPlan, setShowFreshPlan] = useState(false);
   const [planSummaryLine, setPlanSummaryLine] = useState('');
@@ -476,12 +472,10 @@ export default function HomeScreen() {
         setPlanDuration(`${parseMinutes(durationLabel, 40)} minutes`);
       }
 
-      // Map only joined challenges from backend overview
       if (Array.isArray(challengeData?.active_challenges)) {
         setChallenges(mapHomeChallengeItems(challengeData.active_challenges as Array<Record<string, any>>));
       }
 
-      // Check periodic weight check-in prompt
       if (user) {
         const shouldPrompt =
           metrics && typeof metrics.should_prompt_weight_update === 'boolean'
@@ -518,7 +512,6 @@ export default function HomeScreen() {
     setRefreshing(false);
   }, [loadHomeData]);
 
-  // Weight check-in handlers
   const handleConfirmCurrentWeight = useCallback(async () => {
     if (!weightPromptUserId || weightPromptSaving) return;
     setWeightPromptSaving(true);
@@ -565,7 +558,6 @@ export default function HomeScreen() {
     }
   }, [weightDraft, weightPromptSaving, weightPromptUserId]);
 
-  // Derived user subscription tier from onboarding/payment profile
   const tier = useMemo(() => {
     return normalizeSubscriptionTier(currentUser?.subscription_tier);
   }, [currentUser?.subscription_tier]);

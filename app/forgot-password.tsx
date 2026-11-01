@@ -365,7 +365,6 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
 
-  // Header
   headerContainer: {
     maxWidth: 1120,
     width: '100%',
@@ -380,7 +379,6 @@ const styles = StyleSheet.create({
     cursor: Platform.OS === 'web' ? 'pointer' : undefined,
   },
 
-  // Centered Container
   container: {
     width: '100%',
     maxWidth: 480,
@@ -389,7 +387,6 @@ const styles = StyleSheet.create({
     paddingTop: 36,
   },
 
-  // Back Button ←
   backButton: {
     width: 32,
     height: 32,
@@ -405,7 +402,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // Typography
   kicker: {
     fontFamily: Fonts.heading,
     fontSize: 11,
@@ -437,7 +433,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'Inter', sans-serif", textWrap: 'pretty' } as any) : {}),
   },
 
-  // Form Card
   formCard: {
     backgroundColor: '#0D2B45',
     borderRadius: 14,
@@ -503,7 +498,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // CTA Button
   ctaButton: {
     height: 54,
     borderRadius: 14,
@@ -520,7 +514,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // Resend code
   resendRow: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -542,7 +535,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // Back to Sign In Link
   backRow: {
     alignItems: 'center',
     marginTop: 22,

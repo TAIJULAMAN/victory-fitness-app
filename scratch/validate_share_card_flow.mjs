@@ -1,7 +1,5 @@
-// Scratch test script to validate workout completion and share card logic
 import assert from 'node:assert';
 
-// 1. Test Canvas Truncation Logic
 function truncateCanvasText(measureFn, text, maxWidth) {
   if (measureFn(text) <= maxWidth) return text;
   let truncated = text;
@@ -11,7 +9,6 @@ function truncateCanvasText(measureFn, text, maxWidth) {
   return truncated.trim() + '…';
 }
 
-// 2. Test Completed Exercises Mapping Logic (from ClaudeSessionCompleteModal)
 function mapCompletedExercises(exercises) {
   return exercises
     .map((exercise) => {
@@ -27,7 +24,6 @@ function mapCompletedExercises(exercises) {
     .filter((exercise) => Boolean(exercise));
 }
 
-// 3. Test Active Session completion calculation (from ClaudeActiveSessionModal)
 function calculateCompletedSessionExercises(sessionExercises, loggedSets) {
   return sessionExercises
     .map((ex, idx) => {
@@ -45,7 +41,6 @@ function calculateCompletedSessionExercises(sessionExercises, loggedSets) {
     .filter((ex) => Boolean(ex));
 }
 
-// 4. Test Visible Story Card Slicing (Max 5, overflow counter)
 function getStoryCardDisplay(completedExercises, maxVisible = 5) {
   const visible = completedExercises.slice(0, maxVisible);
   const overflow = completedExercises.length - visible.length;
@@ -58,7 +53,6 @@ function getStoryCardDisplay(completedExercises, maxVisible = 5) {
 
 console.log('--- RUNNING WORKOUT COMPLETION & SHARE CARD AUDIT VALIDATION ---');
 
-// TEST 1: Complete workout with 4 exercises
 {
   const sessionExercises = [
     { id: '1', name: 'Bench Press', targetSets: 3 },
@@ -87,7 +81,6 @@ console.log('--- RUNNING WORKOUT COMPLETION & SHARE CARD AUDIT VALIDATION ---');
   console.log('✓ TEST 1 PASSED: 4 exercises completed, all 4 appear on card.');
 }
 
-// TEST 2: Skip one exercise (e.g. Shoulder Press skipped)
 {
   const sessionExercises = [
     { id: '1', name: 'Bench Press', targetSets: 3 },
@@ -95,7 +88,6 @@ console.log('--- RUNNING WORKOUT COMPLETION & SHARE CARD AUDIT VALIDATION ---');
     { id: '3', name: 'Shoulder Press', targetSets: 3 },
     { id: '4', name: 'Biceps Curl', targetSets: 3 },
   ];
-  // Exercise 2 (Shoulder Press at index 2) was skipped -> NO sets logged
   const loggedSets = {
     '0:0': '80 kg × 10', '0:1': '80 kg × 10', '0:2': '80 kg × 8',
     '1:0': '65 kg × 10', '1:1': '65 kg × 10', '1:2': '65 kg × 10',
@@ -113,7 +105,6 @@ console.log('--- RUNNING WORKOUT COMPLETION & SHARE CARD AUDIT VALIDATION ---');
   console.log('✓ TEST 2 PASSED: Skipped exercise is not falsely shown.');
 }
 
-// TEST 3: Swapped / changed exercise
 {
   const sessionExercises = [
     { id: '1', name: 'Incline Dumbbell Press', targetSets: 3 }, // Swapped from Flat Bench
@@ -135,12 +126,10 @@ console.log('--- RUNNING WORKOUT COMPLETION & SHARE CARD AUDIT VALIDATION ---');
   console.log('✓ TEST 3 PASSED: Swapped/changed exercises are accurately captured and shown.');
 }
 
-// TEST 4: Long exercise names & Canvas truncation
 {
   const longName = 'Incline Dumbbell Bench Press with 3-Second Eccentric Pause and Peak Contraction';
-  // Mock measure function: 1 char = 12px
   const mockMeasure = (txt) => txt.length * 12;
-  const maxWidth = 400; // max ~33 chars
+  const maxWidth = 400;
 
   const truncated = truncateCanvasText(mockMeasure, longName, maxWidth);
   assert.ok(mockMeasure(truncated) <= maxWidth, 'Truncated text must fit within maxWidth');
@@ -148,7 +137,6 @@ console.log('--- RUNNING WORKOUT COMPLETION & SHARE CARD AUDIT VALIDATION ---');
   console.log(`✓ TEST 4 PASSED: Long exercise name truncated cleanly: "${truncated}" (${mockMeasure(truncated)}px <= ${maxWidth}px)`);
 }
 
-// TEST 5: Graceful handling of > 5 exercises (overflow counter)
 {
   const sessionExercises = [
     { id: '1', name: 'Bench Press', targetSets: 3 },
@@ -174,7 +162,6 @@ console.log('--- RUNNING WORKOUT COMPLETION & SHARE CARD AUDIT VALIDATION ---');
   console.log('✓ TEST 5 PASSED: 8 exercises gracefully capped at 5 visible + 3 overflow badge.');
 }
 
-// TEST 6: Streak, Intensity, Time preservation
 {
   const streakDays = 14;
   const minutes = 45;

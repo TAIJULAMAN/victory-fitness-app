@@ -62,7 +62,6 @@ export default function ClaudeHydrationCard({
     }
   }, [reminderMode]);
 
-  // Hydrate from storage when backend state has not arrived yet.
   useEffect(() => {
     let cancelled = false;
     (async () => {

@@ -75,21 +75,18 @@ export default function EditProfileScreen() {
   const router = useRouter();
   const { language, setLanguage, t } = useLanguage();
 
-  // Basic Account Info
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [preferredLanguage, setPreferredLanguage] = useState<LanguageCode>(language);
   const [showLanguageModal, setShowLanguageModal] = useState(false);
 
-  // Personal Profile & Body Metrics
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('Prefer not to say');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [weightUnit, setWeightUnit] = useState<'kg' | 'lb'>('kg');
 
-  // Fitness Goals & Onboarding Routine (Anamnese)
   const [primaryGoal, setPrimaryGoal] = useState('To build visible muscle');
   const [daysPerWeek, setDaysPerWeek] = useState('4');
   const [timePerSession, setTimePerSession] = useState('45');
@@ -98,7 +95,6 @@ export default function EditProfileScreen() {
   const [activityLevel, setActivityLevel] = useState('Moderately active');
   const [healthNotes, setHealthNotes] = useState('');
 
-  // Processing & State
   const [savingProfile, setSavingProfile] = useState(false);
   const [savingLanguage, setSavingLanguage] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -133,51 +129,40 @@ export default function EditProfileScreen() {
       const anamnese = (onboardingState?.anamnese || localData?.anamnese || {}) as Record<string, any>;
       const preferences = (onboardingState?.preferences || localData?.preferences || {}) as Record<string, any>;
 
-      // Age
       const loadedAge = String(metrics?.age || personal?.age || '').trim();
       if (loadedAge) setAge(loadedAge);
 
-      // Gender
       const loadedGender = String(metrics?.gender || personal?.gender || '').trim();
       if (loadedGender) setGender(loadedGender);
 
-      // Height
       const loadedHeight = String(metrics?.height || personal?.height || '').trim();
       if (loadedHeight) setHeight(loadedHeight);
 
-      // Weight
       const loadedWeight = String(metrics?.weight || personal?.weight || '').trim();
       if (loadedWeight) setWeight(loadedWeight);
       if (personal?.weightUnit === 'lb') setWeightUnit('lb');
 
-      // Primary Goal
       const loadedGoal = String(anamnese?.primaryGoal || (Array.isArray(anamnese?.primaryGoals) ? anamnese.primaryGoals[0] : '') || '').trim();
       if (loadedGoal) setPrimaryGoal(loadedGoal);
 
-      // Days per week
       const loadedDays = String(anamnese?.daysPerWeek || '').trim();
       if (loadedDays && Number(loadedDays) >= 1 && Number(loadedDays) <= 7) {
         setDaysPerWeek(loadedDays);
       }
 
-      // Time per session
       const loadedTime = String(anamnese?.timePerSession || '').trim();
       if (loadedTime) setTimePerSession(loadedTime);
 
-      // Equipment access
       const loadedEquipment = String(anamnese?.equipmentAccess || '').trim();
       if (loadedEquipment) setEquipmentAccess(loadedEquipment);
 
-      // Selected kit
       if (Array.isArray(preferences?.selectedKit) && preferences.selectedKit.length > 0) {
         setSelectedKit(preferences.selectedKit);
       }
 
-      // Activity level
       const loadedActivity = String(anamnese?.activityLevel || '').trim();
       if (loadedActivity) setActivityLevel(loadedActivity);
 
-      // Health notes
       const loadedNotes = String(anamnese?.healthNotes || '').trim();
       if (loadedNotes) setHealthNotes(loadedNotes);
 
@@ -190,7 +175,6 @@ export default function EditProfileScreen() {
     return SUPPORTED_LANGUAGES.find((l) => l.code === preferredLanguage) || SUPPORTED_LANGUAGES[0];
   }, [preferredLanguage]);
 
-  // Live protein calculation preview
   const proteinPreview = useMemo(() => {
     const wNum = parseFloat(weight.replace(/[^\d.]/g, ''));
     if (!wNum || isNaN(wNum)) return null;
@@ -257,14 +241,12 @@ export default function EditProfileScreen() {
 
     setSavingProfile(true);
     try {
-      // 1. Update basic user profile
       await updateCurrentUserProfile({
         name: trimmedName,
         profileImage: profileImage.trim() || undefined,
         preferred_language: preferredLanguage,
       });
 
-      // 2. Update body metrics
       await updateCurrentUserBodyMetrics({
         age: trimmedAge || undefined,
         height: trimmedHeight || undefined,
@@ -274,7 +256,6 @@ export default function EditProfileScreen() {
         console.warn('Non-fatal body metrics sync issue:', err);
       });
 
-      // 3. Update full onboarding profile state
       const updatedPersonal = {
         age: trimmedAge,
         gender: gender,
@@ -315,7 +296,6 @@ export default function EditProfileScreen() {
         console.warn('Non-fatal onboarding state sync issue:', err);
       });
 
-      // 4. Update local storage snapshot
       await syncOnboardingProfileFields(trimmedName, updatedPersonal).catch(() => null);
 
       await setLanguage(preferredLanguage);
@@ -1118,7 +1098,6 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
 
-  /* Card Sections */
   cardSection: {
     backgroundColor: 'rgba(13, 43, 69, 0.35)',
     borderRadius: 20,
@@ -1226,7 +1205,6 @@ const styles = StyleSheet.create({
     right: 16,
   },
 
-  /* Stepper UI */
   stepperRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1255,7 +1233,6 @@ const styles = StyleSheet.create({
     paddingVertical: 11,
   },
 
-  /* Unit Toggle */
   unitToggleWrap: {
     flexDirection: 'row',
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
@@ -1280,7 +1257,6 @@ const styles = StyleSheet.create({
     color: Colors.obsidian,
   },
 
-  /* Chip Grid */
   chipGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -1308,7 +1284,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.heading,
   },
 
-  /* Protein Insight Card */
   proteinInsightCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1340,7 +1315,6 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
-  /* Goals UI */
   goalListWrap: {
     gap: 8,
   },
@@ -1376,7 +1350,6 @@ const styles = StyleSheet.create({
     color: 'rgba(247, 243, 238, 0.8)',
   },
 
-  /* Days Selector */
   daysRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -1405,7 +1378,6 @@ const styles = StyleSheet.create({
     color: Colors.obsidian,
   },
 
-  /* Time Pills */
   timePillsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -1432,7 +1404,6 @@ const styles = StyleSheet.create({
     color: Colors.obsidian,
   },
 
-  /* Places */
   placesList: {
     gap: 8,
   },
@@ -1476,7 +1447,6 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
-  /* Kit Chips */
   kitChipsWrap: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -1507,7 +1477,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.heading,
   },
 
-  /* Activity cards */
   activityCard: {
     width: '48%',
     padding: 10,
@@ -1535,7 +1504,6 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
 
-  /* Language Field */
   languageDropdownField: {
     minHeight: 58,
     borderRadius: 14,
@@ -1583,7 +1551,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.heading,
   },
 
-  /* Modal */
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(13, 13, 13, 0.85)',
@@ -1664,7 +1631,6 @@ const styles = StyleSheet.create({
     color: Colors.gold,
   },
 
-  /* Save CTA */
   saveBtn: {
     backgroundColor: Colors.gold,
     paddingVertical: 16,

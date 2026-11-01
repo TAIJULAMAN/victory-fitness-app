@@ -28,7 +28,6 @@ import {
   ONBOARDING_STEP_KEY,
 } from '../../components/onboarding/ClaudeOnboardingFlow';
 
-// Claude Design Reference Palette
 const OBSIDIAN = '#0D0D0D';
 const NAVY = '#0D2B45';
 const GOLD = '#C9943A';
@@ -39,7 +38,7 @@ const DMSANS = Platform.select({ web: "'DM Sans', sans-serif", default: 'DMSans-
 const INTER = Platform.select({ web: "'Inter', sans-serif", default: 'Inter-Regular' });
 const MONO = Platform.select({ web: "'JetBrains Mono', monospace", default: 'JetBrainsMono-Bold' });
 
-const RESEND_COOLDOWN_SECONDS = 120; // 2 minutes cooldown
+const RESEND_COOLDOWN_SECONDS = 120;
 
 function formatCountdown(totalSeconds: number) {
   const minutes = Math.floor(totalSeconds / 60);
@@ -66,7 +65,6 @@ export default function VerificationScreen() {
 
   const cursorOpacity = useRef(new Animated.Value(1)).current;
 
-  // Blinking gold cursor animation
   useEffect(() => {
     const blink = Animated.loop(
       Animated.sequence([
@@ -86,7 +84,6 @@ export default function VerificationScreen() {
     return () => blink.stop();
   }, [cursorOpacity]);
 
-  // Resend countdown timer
   useEffect(() => {
     if (resendSeconds === 0) return;
     const timer = setInterval(() => {

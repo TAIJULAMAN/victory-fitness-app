@@ -634,7 +634,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.06)',
     marginVertical: 14,
   },
-  // PURPOSE Grid: 3-column balanced squircle tiles
   purposeGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -654,7 +653,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: 'center',
   },
-  // Tile States
   tileInactive: {
     backgroundColor: 'rgba(255, 255, 255, 0.035)',
     borderWidth: 1,
@@ -682,7 +680,6 @@ const styles = StyleSheet.create({
     color: GOLD_LIGHT,
     fontWeight: '700',
   },
-  // Segmented Controls (DIFFICULTY & MINUTES)
   segmentedControl: {
     flexDirection: 'row',
     backgroundColor: 'rgba(0, 0, 0, 0.28)',
@@ -723,7 +720,6 @@ const styles = StyleSheet.create({
     color: GOLD_LIGHT,
     fontWeight: '700',
   },
-  // KIT / EQUIPMENT Rows
   kitRow: {
     flexDirection: 'row',
     gap: 7,
@@ -741,7 +737,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: 'center',
   },
-  // Result Count Banner
   resultCountWrap: {
     flexDirection: 'row',
     alignItems: 'center',

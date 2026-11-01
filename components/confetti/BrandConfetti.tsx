@@ -49,7 +49,6 @@ export function BrandConfetti({ active, duration = 3000, colors = BRAND_COLORS, 
     if (!active) return;
 
     const animations = particlesRef.current.map((p) => {
-      // Reset values
       p.animY.setValue(0);
       p.animX.setValue(0);
       p.animRotate.setValue(0);

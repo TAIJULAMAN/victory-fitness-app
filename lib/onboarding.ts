@@ -336,9 +336,6 @@ export async function shouldShowWeightUpdatePrompt(userId: string) {
     return true;
   }
 
-  // The backend onboarding flow does not always create a local onboardingData
-  // record. A handled prompt must therefore be checked before relying on the
-  // local weight value, otherwise the prompt reappears on every home visit.
   if (!lastPromptDate) {
     return true;
   }

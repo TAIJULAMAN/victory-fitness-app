@@ -280,7 +280,6 @@ export default function ClaudeWeekPlanModal({
     scrollRef.current?.scrollTo({ y: 0, animated: false });
     const started = Date.now();
     const timer = setInterval(() => {
-      // Estimated waiting progress: only a successful response means completion.
       setProgress(Math.min(95, Math.floor(5 + 90 * (1 - Math.exp(-(Date.now() - started) / 60000)))));
     }, 1000);
     return () => clearInterval(timer);
@@ -472,7 +471,6 @@ export default function ClaudeWeekPlanModal({
               <Text style={styles.buildHint}>Cancel stops waiting here. Preparation may still finish in the background.</Text>
             </View>
           ) : viewMode === 'questionnaire' ? (
-            /* 1. Questionnaire View (matching prototype lines 1567-1619) */
             <View>
               <Text style={styles.headline}>Tell me what you like eating</Text>
               <Text style={styles.subheadline}>
@@ -834,7 +832,6 @@ export default function ClaudeWeekPlanModal({
               </Pressable>
             </View>
           ) : (
-            /* 2. Week View (matching prototype lines 1621-1653) */
             <View>
               <Text style={styles.headline}>Your week</Text>
               <Text style={styles.subheadline}>

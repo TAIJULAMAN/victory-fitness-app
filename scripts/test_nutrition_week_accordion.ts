@@ -302,14 +302,12 @@ const DAY_NAME_KEYS: Record<string, string> = {
 function runAuditTests() {
   console.log('=== STARTING SAVED WEEKLY NUTRITION PLAN AUDIT TESTS ===\n');
 
-  // TEST 1: All 7 days accessible
   assert(mockPlan.days.length === 7, 'Plan has exactly 7 days');
   const expectedDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   expectedDays.forEach((dayKey, idx) => {
     assert(mockPlan.days[idx].day === dayKey, `Day ${idx + 1} is ${dayKey}`);
   });
 
-  // TEST 2: German and English labels work for all 7 days
   const enTranslations = STATIC_TRANSLATIONS.en || {};
   const deTranslations = STATIC_TRANSLATIONS.de || {};
 
@@ -329,7 +327,6 @@ function runAuditTests() {
     assert(deTranslations[canonical] === expectedGermanDays[canonical], `German day label for ${canonical} is ${expectedGermanDays[canonical]}`);
   });
 
-  // TEST 3: German and English labels for UI components
   const requiredUiKeys = [
     'Your saved week',
     'Back to Food',
@@ -354,25 +351,19 @@ function runAuditTests() {
     assert(!!deTranslations[key], `German translation exists for "${key}" -> "${deTranslations[key]}"`);
   });
 
-  // TEST 4: Accordion interaction logic
-  // Simulate single-day accordion state changes
-  let expandedDay: string | null = 'Mon'; // initially Monday open
+  let expandedDay: string | null = 'Mon';
   assert(expandedDay === 'Mon', 'Default expanded day is Monday');
 
-  // User collapses Monday:
   const toggle = (current: string | null, clicked: string) => (current === clicked ? null : clicked);
   expandedDay = toggle(expandedDay, 'Mon');
   assert(expandedDay === null, 'Clicking Monday collapses it; no days expanded');
 
-  // User opens Tuesday:
   expandedDay = toggle(expandedDay, 'Tue');
   assert(expandedDay === 'Tue', 'Clicking Tuesday opens Tuesday');
 
-  // User clicks Wednesday:
   expandedDay = toggle(expandedDay, 'Wed');
   assert(expandedDay === 'Wed', 'Clicking Wednesday closes Tuesday and opens Wednesday');
 
-  // TEST 5: Correct meals remain under correct day & No data lost
   mockPlan.days.forEach((dayPlan) => {
     const dayLabel = DAY_NAME_KEYS[dayPlan.day];
     assert(!!dayPlan.breakfast, `${dayLabel} has breakfast`);
@@ -393,7 +384,6 @@ function runAuditTests() {
     assert(dayPlan.dinner.instructions.length > 0, `${dayLabel} dinner has preparation instructions`);
   });
 
-  // Monday snacks validation
   const mon = mockPlan.days[0];
   assert(!!mon.pre_workout, 'Monday has pre_workout snack');
   assert(mon.pre_workout?.kcal === 180, 'Monday pre_workout kcal preserved (180)');
@@ -401,10 +391,7 @@ function runAuditTests() {
   assert(!!mon.post_workout, 'Monday has post_workout snack');
   assert(mon.post_workout?.p === 32, 'Monday post_workout protein preserved (32g)');
 
-  // TEST 6: Shopping list preserved
-  // TEST 7: Preparation Steps End-to-End Audit & Fallback
 
-  // 7a. Existing instructions reused
   const mealWithInstructions: NutritionMealEntry = {
     name: 'Jollof with Grilled Chicken',
     desc: 'Spicy rice dish',
@@ -419,7 +406,6 @@ function runAuditTests() {
   assert(prep1.length === 4, 'Meal with instructions returns 4 steps');
   assert(prep1[0] === 'Parboil rice', 'First step matches instruction');
 
-  // 7b. preparation_steps field priority
   const mealWithPrepSteps: NutritionMealEntry = {
     name: 'Ghanaian Waakye',
     desc: 'Rice and beans with waakye leaves',
@@ -435,7 +421,6 @@ function runAuditTests() {
   assert(prep2.length === 3, 'Meal with preparation_steps returns correct steps');
   assert(prep2[0] === 'Boil beans with sorghum leaves', 'preparation_steps prioritized over empty instructions');
 
-  // 7c. Missing preparation data graceful fallback (meal-specific, not generic)
   const mealWithoutPrep: NutritionMealEntry = {
     name: 'Banku with Tilapia',
     desc: 'Fermented corn and cassava dough with grilled fish',
@@ -453,7 +438,6 @@ function runAuditTests() {
   assert(prep3[2].toLowerCase().includes('seasoning'), 'Step 3 mentions seasoning');
   assert(prep3[3].toLowerCase().includes('serve'), 'Step 4 mentions serving');
 
-  // 7d. Mobile preparation expand/collapse state simulation
   let openPrepKeys: Record<string, boolean> = {};
   const toggleMeal = (key: string) => {
     openPrepKeys[key] = !openPrepKeys[key];

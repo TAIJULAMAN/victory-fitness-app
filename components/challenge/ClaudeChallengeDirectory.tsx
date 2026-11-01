@@ -16,11 +16,11 @@ import { useLanguage } from '../../lib/i18n';
 export interface ChallengeItem {
   id: string;
   challengeId?: string;
-  n: string; // name
-  d: number; // days
-  c: string; // category
-  p: string; // points e.g. "800 pts"
-  joined: string; // "142 joined"
+  n: string;
+  d: number;
+  c: string;
+  p: string;
+  joined: string;
   faces: { i: string; image?: string }[];
   desc?: string;
   why?: string;
@@ -1197,7 +1197,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 
-  /* Master Challenge Card */
   challengeCard: {
     backgroundColor: NAVY,
     borderRadius: 16,
@@ -1349,7 +1348,6 @@ const styles = StyleSheet.create({
     color: '#22C55E',
   },
 
-  /* Skeleton Loading State */
   skeletonCard: {
     borderLeftColor: 'rgba(201, 148, 58, 0.45)',
   },
@@ -1361,7 +1359,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(247, 243, 238, 0.1)',
   },
 
-  /* Pull-in Guest Card */
   guestCard: {
     marginTop: 16,
     marginBottom: 8,

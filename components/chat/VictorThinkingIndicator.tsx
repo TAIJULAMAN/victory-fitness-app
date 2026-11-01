@@ -21,7 +21,6 @@ type EquipmentItem =
   | { family: 'ionicons'; name: keyof typeof Ionicons.glyphMap; size: number }
   | { family: 'material'; name: keyof typeof MaterialCommunityIcons.glyphMap; size: number };
 
-// Curated luxury fitness equipment icons in a rhythmic athletic cadence
 const EQUIPMENT_ICONS: EquipmentItem[] = [
   { family: 'ionicons', name: 'barbell-outline', size: 14.5 },
   { family: 'material', name: 'dumbbell', size: 14 },
@@ -31,29 +30,23 @@ const EQUIPMENT_ICONS: EquipmentItem[] = [
 ];
 
 export function VictorThinkingIndicator({ text = 'Thinking' }: VictorThinkingIndicatorProps) {
-  // Current active gym equipment icon index
   const [iconIdx, setIconIdx] = useState(0);
 
-  // Silky vertical slot-roll animation values
   const iconScale = useRef(new Animated.Value(1)).current;
   const iconOpacity = useRef(new Animated.Value(1)).current;
   const iconTranslateY = useRef(new Animated.Value(0)).current;
 
-  // 3 kinetic wave dots
   const dot1 = useRef(new Animated.Value(0)).current;
   const dot2 = useRef(new Animated.Value(0)).current;
   const dot3 = useRef(new Animated.Value(0)).current;
 
-  // Subtle text breath
   const textOpacity = useRef(new Animated.Value(0.7)).current;
 
-  // Athletic Cadence Loop: ~72 BPM rhythmic vertical glide between gym equipment icons
   useEffect(() => {
     let isMounted = true;
     let timeoutId: ReturnType<typeof setTimeout>;
 
     const rollNextIcon = () => {
-      // 1. Smooth upward glide out (140ms)
       Animated.parallel([
         Animated.timing(iconOpacity, {
           toValue: 0,
@@ -76,11 +69,9 @@ export function VictorThinkingIndicator({ text = 'Thinking' }: VictorThinkingInd
       ]).start(() => {
         if (!isMounted) return;
 
-        // 2. Switch to next gym equipment
         setIconIdx((prev) => (prev + 1) % EQUIPMENT_ICONS.length);
-        iconTranslateY.setValue(7); // Start slightly below for upward entry
+        iconTranslateY.setValue(7);
 
-        // 3. Smooth upward glide in with micro-cushion (190ms)
         Animated.parallel([
           Animated.timing(iconOpacity, {
             toValue: 1,
@@ -102,13 +93,11 @@ export function VictorThinkingIndicator({ text = 'Thinking' }: VictorThinkingInd
           }),
         ]).start(() => {
           if (!isMounted) return;
-          // 4. Optimal athletic hold: 520ms (~72 BPM resting heart rate cadence)
           timeoutId = setTimeout(rollNextIcon, 520);
         });
       });
     };
 
-    // Initial hold before first roll
     timeoutId = setTimeout(rollNextIcon, 520);
 
     return () => {
@@ -120,7 +109,6 @@ export function VictorThinkingIndicator({ text = 'Thinking' }: VictorThinkingInd
     };
   }, [iconOpacity, iconScale, iconTranslateY]);
 
-  // Synchronized kinetic wave dots & text breathing
   useEffect(() => {
     const createDotAnim = (anim: Animated.Value, delay: number) => {
       return Animated.loop(
@@ -177,7 +165,6 @@ export function VictorThinkingIndicator({ text = 'Thinking' }: VictorThinkingInd
     };
   }, [dot1, dot2, dot3, textOpacity]);
 
-  // Sanitize label to eliminate duplicate trailing periods
   const displayLabel = (text || 'Thinking').replace(/[.…]+$/, '');
   const currentEquipment = EQUIPMENT_ICONS[iconIdx];
 

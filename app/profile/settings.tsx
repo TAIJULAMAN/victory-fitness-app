@@ -36,17 +36,13 @@ export default function ProfileSettingsScreen() {
   const [consents, setConsents] = useState<Record<ConsentId, boolean>>({ email: false, whatsapp: false, journal: false });
   const [consentSaving, setConsentSaving] = useState<ConsentId | null>(null);
 
-  // Section 20.3: Identity Statement
   const [identityStatement, setIdentityStatement] = useState('');
 
-  // Section 20.5: If-Then Trigger Builder
   const [trainingTriggerContext, setTrainingTriggerContext] = useState('');
   const [trainingTriggerAction, setTrainingTriggerAction] = useState('open the app and start my workout');
 
-  // Section 20.4: Workout Unlock
   const [workoutUnlockLabel, setWorkoutUnlockLabel] = useState('');
 
-  // Commitment statement
   const [motivationStatement, setMotivationStatement] = useState('');
 
   const applyUserSettings = (user: Awaited<ReturnType<typeof fetchCurrentUser>>) => {

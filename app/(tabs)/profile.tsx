@@ -235,7 +235,6 @@ export default function ProfileScreen() {
   const [wearableSyncMeta, setWearableSyncMeta] = useState('Connect a device to sync health metrics');
   const [isSigningOut, setIsSigningOut] = useState(false);
 
-  // Modals state
   const [showDuoModal, setShowDuoModal] = useState(false);
   const [showDigestModal, setShowDigestModal] = useState(false);
   const [showWearModal, setShowWearModal] = useState(false);
@@ -1654,7 +1653,6 @@ const styles = StyleSheet.create({
     color: OBSIDIAN,
   },
 
-  /* Body & Fitness Metrics Card Styles */
   sectionHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',

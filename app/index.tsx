@@ -19,8 +19,6 @@ export default function Index() {
         const tokens = await getValidAuthTokens();
         if (cancelled) return;
         if (tokens?.access_token) {
-          // Prefer the server record: onboarding completion and trial expiry
-          // are persisted there and a cached profile may be stale after login.
           const user = await fetchCurrentUser({ forceRefresh: true }).catch(() => getAuthUser());
           if (cancelled) return;
           if (user) {

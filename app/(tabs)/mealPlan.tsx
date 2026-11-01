@@ -57,7 +57,6 @@ export default function MealPlanScreen() {
   const { isDark, colors } = useTheme();
   const { t } = useLanguage();
 
-  // Current user & tier state
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [nutritionPlan, setNutritionPlan] = useState<NutritionPlanApiResponse | null>(null);
   const [mealLogs, setMealLogs] = useState<NutritionMealLog[]>([]);
@@ -72,7 +71,6 @@ export default function MealPlanScreen() {
     fileName: string;
   } | null>(null);
 
-  // Modals state
   const [showMealAnalysisModal, setShowMealAnalysisModal] = useState(false);
   const [showWeekPlanModal, setShowWeekPlanModal] = useState(false);
   const [showShoppingModal, setShowShoppingModal] = useState(false);
@@ -703,7 +701,6 @@ const styles = StyleSheet.create({
     color: OBSIDIAN,
   },
 
-  // Silver Lock Paywall styles (matching prototype lines 1112-1128)
   silverLockContainer: {
     paddingTop: 4,
     paddingBottom: 40,

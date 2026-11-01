@@ -61,7 +61,6 @@ export default function ClaudeTodayWorkoutCard({
 
   const resolvedTitle = hasActivePlan ? canonicalizeFitnessText(workoutTitle) : t('Create your 7 day workout plan');
 
-  // Dynamically compute font size to ensure the title always stays on 1 line across screen sizes and languages
   const titleFontSize = useMemo(() => {
     const textLen = (resolvedTitle || '').length;
     if (!textLen) return 20;
@@ -92,7 +91,6 @@ export default function ClaudeTodayWorkoutCard({
       onStartSession();
       return;
     }
-    // Navigate to active workout / library
     pushRoute(router, '/workout');
   };
 

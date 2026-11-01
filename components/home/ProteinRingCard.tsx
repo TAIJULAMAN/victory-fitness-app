@@ -40,7 +40,6 @@ export default function ProteinRingCard({ onPressLogMeal }: ProteinRingCardProps
   const router = useRouter();
   const { t } = useLanguage();
 
-  // Zero by default: NO demo data!
   const [proteinTarget, setProteinTarget] = useState(0);
   const [proteinConsumed, setProteinConsumed] = useState(0);
   const [caloriesTarget, setCaloriesTarget] = useState(0);
@@ -161,7 +160,6 @@ export default function ProteinRingCard({ onPressLogMeal }: ProteinRingCardProps
   const proteinPct = Math.round(proteinRatio * 100);
   const caloriesPct = Math.round(caloriesRatio * 100);
 
-  // SVG parameters for concentric rings
   const size = 160;
   const strokeWidth = 10;
   const outerRadius = 66;
@@ -628,7 +626,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontFamily: Fonts.dataBold,
   },
-  // Modal styles
   modalBackdrop: {
     flex: 1,
     backgroundColor: 'rgba(13, 13, 13, 0.80)',

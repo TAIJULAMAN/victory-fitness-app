@@ -22,7 +22,6 @@ import { ScreenState } from '../../components/ScreenState';
 import { useAsyncScreenData } from '../../hooks/useAsyncScreenData';
 import { useTheme } from '../../context/ThemeContext';
 
-// Luxury Design Tokens
 const OBSIDIAN = '#0D0D0D';
 const NAVY = '#0D2B45';
 const GOLD = '#C9943A';
@@ -34,7 +33,6 @@ const DMSANS = Platform.select({ web: "'DM Sans', sans-serif", default: 'DMSans-
 const INTER = Platform.select({ web: "'Inter', sans-serif", default: 'Inter-Regular' });
 const MONO = Platform.select({ web: "'JetBrains Mono', monospace", default: 'JetBrainsMono-Bold' });
 
-// Curated high-resolution fitness photography by discipline
 const CATEGORY_IMAGES: Record<string, string> = {
   strength: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80',
   mobility: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80',
@@ -95,7 +93,6 @@ export default function WorkoutCategoriesScreen() {
     return categories.reduce((sum, c) => sum + (c.count || 0), 0);
   }, [categories]);
 
-  // Filtered categories by search text and filter chip
   const filteredCategories = useMemo(() => {
     let list = categories;
 
@@ -126,7 +123,6 @@ export default function WorkoutCategoriesScreen() {
     });
   };
 
-  // Filter chips
   const filterChips = useMemo(() => {
     const names = ['All', ...categories.map((c) => c.name)];
     return Array.from(new Set(names));
@@ -348,7 +344,6 @@ export default function WorkoutCategoriesScreen() {
             </TouchableOpacity>
           </View>
         ) : (
-          /* High-End Category Grid */
           <View style={styles.categoryGrid}>
             {filteredCategories.map((category, index) => {
               const rankNumber = String(index + 1).padStart(2, '0');

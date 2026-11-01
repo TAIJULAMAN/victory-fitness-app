@@ -65,7 +65,6 @@ export function formatStructuredNutritionSummary(
   const days = plan.days || [];
   const dayCount = (days.length <= 1 || days.length === 7) ? 7 : days.length;
 
-  // 1. Calculate dynamic average calories from all meals
   let totalKcal = 0;
   let totalProtein = 0;
 
@@ -81,7 +80,6 @@ export function formatStructuredNutritionSummary(
     ? Math.round((totalKcal / days.length) / 50) * 50
     : 2100;
 
-  // 2. Dynamic protein target
   let proteinTarget = plan.daily_protein_target || 0;
   if (!proteinTarget && days.length > 0 && totalProtein > 0) {
     proteinTarget = Math.round(totalProtein / days.length);
@@ -90,7 +88,6 @@ export function formatStructuredNutritionSummary(
     proteinTarget = 120;
   }
 
-  // 3. Goal text
   const profile = (plan.profile && typeof plan.profile === 'object' ? plan.profile : {}) as Record<string, any>;
   const goalCode = String(profile.goal || '').toLowerCase();
   const rawGoalLabel = String(plan.goal_label || profile.goal_label || '').trim();
@@ -112,7 +109,6 @@ export function formatStructuredNutritionSummary(
     goalText = translate('nutrition');
   }
 
-  // 4. Country / Cuisine context
   const rawCuisine = String(profile.cuisine || profile.country || '').trim().toLowerCase();
   const summaryLower = String(plan.summary || '').toLowerCase();
 
@@ -142,7 +138,6 @@ export function formatStructuredNutritionSummary(
   const cuisinePrefix = cuisineLabel ? `${cuisineLabel} ` : '';
   const primaryLine = `${dayCount}-${translate('day')} ${cuisinePrefix}${goalText} ${translate('plan')} • ~${avgKcal.toLocaleString()} ${translate('kcal/day')} • ${proteinTarget}g ${translate('protein/day')}.`;
 
-  // 5. Dietary restriction / allergy
   const allergies = String(profile.allergies || '').trim().toLowerCase();
   const diet = String(profile.diet || '').trim().toLowerCase();
 
@@ -168,7 +163,6 @@ export function formatStructuredNutritionSummary(
 
   const allergyPart = dietaryNotes.length > 0 ? `${dietaryNotes.join(' ')} ` : '';
 
-  // 6. Preferences / authentic options
   let prefPart = '';
   if (isGhanaian) {
     prefPart = translate('Meals prioritize authentic Ghanaian options and your stated preferences.');

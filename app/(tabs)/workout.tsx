@@ -25,7 +25,6 @@ import { useModuleAccessGuard } from '../../lib/useModuleAccessGuard';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../lib/i18n';
 
-// Modular Claude Workout Components
 import ClaudeTrainHeader from '../../components/workout/ClaudeTrainHeader';
 import ClaudePlanBuildBanner from '../../components/workout/ClaudePlanBuildBanner';
 import ClaudeResumeSessionCard from '../../components/workout/ClaudeResumeSessionCard';
@@ -263,7 +262,6 @@ export default function WorkoutScreen() {
   const cachedWorkoutLibrary = useResourceStore((state) => state.resources[getWorkoutLibraryCacheKey()]?.data as WorkoutLibraryResponse | undefined);
   const cachedCurrentUser = useResourceStore((state) => state.resources[CURRENT_USER_CACHE_KEY]?.data as AuthUser | undefined);
 
-  // Search & Filter State
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPurposes, setSelectedPurposes] = useState<string[]>(['All']);
   const [selectedDifficulty, setSelectedDifficulty] = useState('Any');
@@ -277,14 +275,12 @@ export default function WorkoutScreen() {
     }, [])
   );
 
-  // Plan Build State
   const [planBuilt, setPlanBuilt] = useState(false);
   const [planSummaryLine, setPlanSummaryLine] = useState('');
   const [trainingContextLine, setTrainingContextLine] = useState('Workouts matched to your kit and time');
   const [preferredKitWords, setPreferredKitWords] = useState<string[]>([]);
   const [preferredMinutes, setPreferredMinutes] = useState(0);
 
-  // Modals State
   const [workoutDetailModalVisible, setWorkoutDetailModalVisible] = useState(false);
   const [vimeoModalVisible, setVimeoModalVisible] = useState(false);
   const [planDetailVisible, setPlanDetailVisible] = useState(false);
@@ -292,7 +288,6 @@ export default function WorkoutScreen() {
   const [completeModalVisible, setCompleteModalVisible] = useState(false);
   const [planBuildModalVisible, setPlanBuildModalVisible] = useState(false);
 
-  // Active workout being played / tracked
   const [selectedWorkout, setSelectedWorkout] = useState<GridWorkoutItem | null>(null);
   const [completedStats, setCompletedStats] = useState({
     minutes: 0,
@@ -452,34 +447,28 @@ export default function WorkoutScreen() {
     });
   }, []);
 
-  // Filtered workouts
   const filteredWorkouts = useMemo(() => {
     const activePurposes = selectedPurposes.filter((purpose) => purpose !== 'All');
     const normalizedSelectedPurposes = activePurposes.map(normalizeWords).filter(Boolean);
 
     return libraryWorkouts.filter((w) => {
-      // Search
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchName = w.name.toLowerCase().includes(q);
         const matchMeta = w.meta.toLowerCase().includes(q);
         if (!matchName && !matchMeta) return false;
       }
-      // Purpose
       if (normalizedSelectedPurposes.length > 0) {
         const purposes = Array.isArray(w.purposes) && w.purposes.length ? w.purposes : (w.tag ? [w.tag] : []);
         if (!purposes.some((purpose) => normalizedSelectedPurposes.includes(normalizeWords(purpose)))) return false;
       }
-      // Difficulty
       if (selectedDifficulty !== 'Any') {
         const levels = Array.isArray(w.levels) && w.levels.length ? w.levels : (w.lvl ? [w.lvl] : []);
         if (!levels.some((level) => normalizeWords(level) === normalizeWords(selectedDifficulty))) return false;
       }
-      // Kit
       if (selectedKit !== 'Any') {
         if (!w.meta.toLowerCase().includes(selectedKit.toLowerCase())) return false;
       }
-      // Duration
       if (selectedDuration !== 'Any') {
         const maxMins = parseInt(selectedDuration, 10);
         if ((w.durationMinutes || 0) > maxMins) return false;
@@ -531,7 +520,6 @@ export default function WorkoutScreen() {
   const [completeInitialStep, setCompleteInitialStep] = useState<'feedback' | 'complete'>('complete');
   const [sessionCompletedExercises, setSessionCompletedExercises] = useState<Array<{ name: string; s?: string; cardN?: string; type?: string }>>([]);
 
-  // Actions
   const handleStartWorkout = (w: GridWorkoutItem) => {
     setSelectedWorkout(w);
     setWorkoutDetailModalVisible(true);

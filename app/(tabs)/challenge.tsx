@@ -569,7 +569,6 @@ export default function ChallengeScreen() {
             />
           </>
         ) : (
-          /* Community Feed */
           <ClaudeCommunityFeed
             userTier={userTier}
             userInitials={userInitials}

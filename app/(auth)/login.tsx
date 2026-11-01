@@ -471,7 +471,6 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
 
-  // Header
   headerContainer: {
     maxWidth: 1120,
     width: '100%',
@@ -486,7 +485,6 @@ const styles = StyleSheet.create({
     cursor: Platform.OS === 'web' ? 'pointer' : undefined,
   },
 
-  // Layout
   mainLayout: {
     maxWidth: 1120,
     width: '100%',
@@ -501,7 +499,6 @@ const styles = StyleSheet.create({
     maxWidth: 460,
     width: '100%',
   },
-  // Form Column Typography
   kicker: {
     fontFamily: Fonts.heading,
     fontSize: 11,
@@ -533,7 +530,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'Inter', sans-serif", textWrap: 'pretty' } as any) : {}),
   },
 
-  // Google Button
   googleButton: {
     height: 54,
     borderRadius: 14,
@@ -561,7 +557,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // Divider
   dividerRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -582,7 +577,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // Form Card
   formCard: {
     backgroundColor: '#0D2B45',
     borderRadius: 14,
@@ -646,7 +640,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.body,
   },
 
-  // Code Card
   codeCard: {
     backgroundColor: '#0D2B45',
     borderRadius: 14,
@@ -692,7 +685,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // CTA Button
   ctaButton: {
     height: 54,
     borderRadius: 14,
@@ -709,7 +701,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // Links Row
   linksRow: {
     flexDirection: 'row',
     alignItems: 'center',

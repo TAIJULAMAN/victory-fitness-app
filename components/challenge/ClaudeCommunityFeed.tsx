@@ -19,7 +19,7 @@ export interface CommunityPost {
   id: string;
   name: string;
   tier: string;
-  i: string; // initials
+  i: string;
   profileImage?: string;
   when: string;
   body: string;
@@ -311,7 +311,6 @@ export default function ClaudeCommunityFeed({
 }: ClaudeCommunityFeedProps) {
   const { colors, isDark } = useTheme();
 
-  // Tier normalization
   const normTier = userTier.toLowerCase().replace(/_/g, '').replace(/\s+/g, '');
   const cleanTier = !normTier
     ? ''
@@ -349,7 +348,6 @@ export default function ClaudeCommunityFeed({
     setFeed(posts);
   }, [posts]);
 
-  // New Post Modal State
   const [showPostModal, setShowPostModal] = useState(false);
   const [postKind, setPostKind] = useState<'Text only' | 'Photo' | 'YouTube link'>('Photo');
   const [postDraft, setPostDraft] = useState('');
@@ -363,7 +361,6 @@ export default function ClaudeCommunityFeed({
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [isPublishing, setIsPublishing] = useState(false);
 
-  // Feed scope titles matching lines 3398-3407
   const feedScopeTitle =
     scope === 'auto'
       ? `Your circle · ${feed.length} ${feed.length === 1 ? 'post' : 'posts'}`
@@ -384,7 +381,6 @@ export default function ClaudeCommunityFeed({
       ? 'Showing backend posts available to your account.'
       : 'Showing backend posts for your selected tier audience.';
 
-  // Post audience descriptions matching lines 3396-3397
   const postAudience =
     postScope === 'auto'
       ? 'Your duo and the people you train with'
@@ -1437,7 +1433,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 12,
   },
-  // Modal styles
   modalContainer: {
     flex: 1,
     backgroundColor: OBSIDIAN,

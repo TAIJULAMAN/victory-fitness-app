@@ -200,7 +200,6 @@ export async function updateStrengthWorkoutPlanProgress(
     await persistLatestStrengthPlan(plan);
     return plan;
   } catch (netErr) {
-    // OFFLINE RESILIENCE: Apply progress updates directly to local cache
     const current = latestStrengthPlan || (await loadLatestStrengthWorkoutPlan());
     if (!current) throw netErr;
 

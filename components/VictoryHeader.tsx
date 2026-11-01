@@ -78,7 +78,6 @@ export default function VictoryHeader({
     };
   }, [showGreeting]);
 
-  // Format first name nicely (e.g. "test user one" -> "Test")
   const getFirstName = (fullName: string) => {
     if (!fullName) return '';
     const first = fullName.trim().split(' ')[0];

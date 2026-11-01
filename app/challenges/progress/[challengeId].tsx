@@ -2298,7 +2298,6 @@ const styles = StyleSheet.create({
   postcardDots: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', alignContent: 'space-between', opacity: 0.15 },
   postcardDot: { width: 3, height: 3, borderRadius: 1.5, backgroundColor: Colors.gold },
   
-  /* Backdrop Styles */
   backdropDots: {
     position: 'absolute',
     top: 0,
@@ -2365,7 +2364,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.heading,
   },
   
-  /* New Postcard Redesign Styles */
   newPostcardLogoContainer: {
     alignItems: 'center',
     marginBottom: 16,

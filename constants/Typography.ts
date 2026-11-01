@@ -1,45 +1,19 @@
-/**
- * Victory Fitness - Brand Typography System (v7.0)
- * 
- * ROLE 1: Display / Hero -> DM Sans (600 SemiBold)
- *   Usage: large headings, hero sections, inspirational text
- * 
- * ROLE 2: Headings -> DM Sans (600 SemiBold)
- *   Usage: Section titles, card headers, navigation labels, modal titles
- * 
- * ROLE 3: Body -> Inter (400 Regular / 500 Medium / 600 SemiBold / 700 Bold)
- *   Usage: Paragraphs, descriptions, form input labels, button labels
- * 
- * ROLE 4: Data / Numbers -> JetBrains Mono (500 Medium / 700 Bold)
- *   Usage: Calories, weights, rep counts, statistics, streak counts, timers
- * 
- * Mandatory: All fonts self-hosted locally in /public/fonts/ and /assets/fonts/
- * Zero Google Fonts CDN calls (High performance + German GDPR compliant).
- */
 
 export const Fonts = {
-  // ROLE 1: Display / Hero
   display: 'DMSans-SemiBold',
 
-  // ROLE 2: Headings
   heading: 'DMSans-SemiBold',
 
-  // ROLE 3: Body
   body: 'Inter-Regular',
   bodyMedium: 'Inter-Medium',
   bodySemiBold: 'Inter-SemiBold',
   bodyBold: 'Inter-Bold',
 
-  // ROLE 4: Data / Numbers
   data: 'JetBrainsMono-Medium',
   dataBold: 'JetBrainsMono-Bold',
 } as const;
 
 export const Typography = {
-  // ========================================================
-  // ROLE 1: H1 / Main Heading / Screen Title
-  // Clean, readable DM Sans (SemiBold). Not bloated or fat.
-  // ========================================================
   h1: {
     fontFamily: Fonts.heading,
     fontSize: 26,
@@ -48,9 +22,6 @@ export const Typography = {
     letterSpacing: -0.3,
   },
 
-  // ========================================================
-  // ROLE 2: H2 / Secondary Heading / Subtitle / Modal Title
-  // ========================================================
   h2: {
     fontFamily: Fonts.heading,
     fontSize: 20,
@@ -59,9 +30,6 @@ export const Typography = {
     letterSpacing: -0.2,
   },
 
-  // ========================================================
-  // ROLE 3: H3 / Card Title / Section Subtitle
-  // ========================================================
   h3: {
     fontFamily: Fonts.heading,
     fontSize: 16.5,
@@ -70,10 +38,6 @@ export const Typography = {
     letterSpacing: 0,
   },
 
-  // ========================================================
-  // ROLE 4: Body Text / Paragraphs (Inter)
-  // Crisp, highly readable, standard weight.
-  // ========================================================
   body: {
     fontFamily: Fonts.body,
     fontSize: 14,
@@ -99,9 +63,6 @@ export const Typography = {
     fontWeight: '400' as const,
   },
 
-  // ========================================================
-  // Caption & Meta Text
-  // ========================================================
   caption: {
     fontFamily: Fonts.body,
     fontSize: 12,
@@ -115,9 +76,6 @@ export const Typography = {
     fontWeight: '500' as const,
   },
 
-  // ========================================================
-  // Eyebrows / Kickers (Uppercase Section Labels)
-  // ========================================================
   eyebrow: {
     fontFamily: Fonts.heading,
     fontSize: 10.5,
@@ -127,9 +85,6 @@ export const Typography = {
     textTransform: 'uppercase' as const,
   },
 
-  // ========================================================
-  // Button Labels
-  // ========================================================
   button: {
     fontFamily: Fonts.heading,
     fontSize: 13.5,
@@ -145,9 +100,6 @@ export const Typography = {
     letterSpacing: 0.2,
   },
 
-  // ========================================================
-  // Backward-Compatibility Aliases
-  // ========================================================
   heroTitle: {
     fontFamily: Fonts.heading,
     fontSize: 28,
@@ -199,7 +151,6 @@ export const Typography = {
     letterSpacing: 0.4,
   },
 
-  // Data / Numbers Presets (JetBrains Mono)
   dataMetricHero: {
     fontFamily: Fonts.dataBold,
     fontSize: 28,

@@ -227,7 +227,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       try {
         let resolvedLanguage: LanguageCode | null = null;
 
-        // 1. Check synchronous Web LocalStorage
         if (typeof window !== 'undefined' && window.localStorage) {
           try {
             const webStored = window.localStorage.getItem(GLOBAL_LANGUAGE_STORAGE_KEY);
@@ -237,7 +236,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
           } catch {}
         }
 
-        // 2. Check Global AsyncStorage
         if (!resolvedLanguage) {
           try {
             const globalStored = await AsyncStorage.getItem(GLOBAL_LANGUAGE_STORAGE_KEY).catch(() => null);
@@ -247,7 +245,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
           } catch {}
         }
 
-        // 3. Check cached Auth user
         const cachedUser = await getAuthUser().catch(() => null);
         const user = cachedUser?.preferred_language
           ? cachedUser
@@ -298,7 +295,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     setLanguageState(nextLanguage);
     setApiLanguage(nextLanguage);
 
-    // Persist synchronously to Web LocalStorage and document
     if (typeof window !== 'undefined' && window.localStorage) {
       try {
         window.localStorage.setItem(GLOBAL_LANGUAGE_STORAGE_KEY, nextLanguage);
@@ -308,7 +304,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       document.documentElement.lang = nextLanguage;
     }
 
-    // Persist to AsyncStorage globally and per-user
     try {
       await AsyncStorage.setItem(GLOBAL_LANGUAGE_STORAGE_KEY, nextLanguage);
       const user = await getAuthUser().catch(() => null);
@@ -321,11 +316,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const t = React.useCallback(
     (key: string, params?: Record<string, string | number>) => {
       if (!key) return '';
-      // Canonical English workout/exercise terminology bypasses translation
       if (isCanonicalFitnessTerm(key)) {
         return canonicalizeFitnessText(key);
       }
-      // Canonical English challenge titles bypass translation
       if (isCanonicalChallengeTitle(key)) {
         return canonicalizeChallengeTitle(key);
       }

@@ -388,7 +388,6 @@ export default function NotificationsScreen() {
     if (isMarkingRead || unreadCount === 0) return;
     setIsMarkingRead(true);
 
-    // Optimistically mark all push notifications and activity notifications as read
     setPushNotifications((current) => current.map((n) => ({ ...n, read: true })));
     setReadActivityIds(new Set(activityNotifications.map((n) => n.id)));
 
@@ -439,7 +438,6 @@ export default function NotificationsScreen() {
     const pushIdsToDelete = pushNotifications.filter((n) => selectedSet.has(n.id)).map((n) => n.id);
     const activityIdsToDelete = activityNotifications.filter((n) => selectedSet.has(n.id)).map((n) => n.id);
 
-    // Optimistically update
     setPushNotifications((current) => current.filter((n) => !selectedSet.has(n.id)));
     setActivityNotifications((current) => current.filter((n) => !selectedSet.has(n.id)));
     setSelectedIds(new Set());
@@ -470,7 +468,6 @@ export default function NotificationsScreen() {
 
     const allActivityIds = activityNotifications.map((n) => n.id);
 
-    // Optimistically clear all
     setPushNotifications([]);
     setActivityNotifications([]);
     setSelectedIds(new Set());

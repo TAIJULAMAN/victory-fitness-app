@@ -59,7 +59,6 @@ export default function ClaudeCoachBar({ tier }: ClaudeCoachBarProps) {
     );
   }
 
-  // Silver locked teaser
   return (
     <View style={styles.container}>
       <Pressable

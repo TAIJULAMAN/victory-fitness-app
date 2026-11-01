@@ -108,7 +108,6 @@ export default function RegisterScreen() {
   const [whatsappConsent, setWhatsappConsent] = useState(false);
   const [ageConfirmed, setAgeConfirmed] = useState(false);
 
-  // Region selection
   const detectedLocale = useMemo(() => detectCountryFromDeviceLocale(), []);
   const initialRegionKey: RegionKey = useMemo(() => {
     const code = getInitialRegionForDomainContext(detectedLocale?.country.code);
@@ -621,7 +620,6 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
 
-  // Back Button ←
   backButton: {
     width: 32,
     height: 32,
@@ -637,7 +635,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // Header
   title: {
     fontFamily: Fonts.display,
     fontSize: 32,
@@ -659,7 +656,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'Inter', sans-serif", textWrap: 'pretty' } as any) : {}),
   },
 
-  // Challenge Banner
   challengeBanner: {
     backgroundColor: '#0D2B45',
     borderRadius: 14,
@@ -689,7 +685,6 @@ const styles = StyleSheet.create({
     color: 'rgba(247,243,238,0.7)',
   },
 
-  // Google Button
   googleButton: {
     height: 54,
     borderRadius: 14,
@@ -717,7 +712,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // Divider
   dividerRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -738,7 +732,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // Form Card
   formCard: {
     backgroundColor: '#0D2B45',
     borderRadius: 14,
@@ -818,7 +811,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.body,
   },
 
-  // Region Selector Card
   regionCard: {
     backgroundColor: '#0D2B45',
     borderRadius: 14,
@@ -893,7 +885,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'Inter', sans-serif" } as any) : {}),
   },
 
-  // Consent Row
   consentRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -933,7 +924,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'Inter', sans-serif" } as any) : {}),
   },
 
-  // CTA Button
   ctaButton: {
     width: '100%',
     height: 54,
@@ -952,7 +942,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // Footnote
   footnote: {
     marginTop: 16,
     fontFamily: Fonts.body,
@@ -963,7 +952,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'Inter', sans-serif" } as any) : {}),
   },
 
-  // Sign In Row
   signinRow: {
     flexDirection: 'row',
     justifyContent: 'center',

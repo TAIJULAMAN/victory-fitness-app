@@ -93,12 +93,10 @@ export default function StrengthPlanDashboard() {
   const [cardAction, setCardAction] = useState<'download' | 'share' | 'preview' | ''>('');
   const [planToDelete, setPlanToDelete] = useState<StrengthPlanResponse | null>(null);
 
-  // Accordion and Day selection states
   const [expandedPlanId, setExpandedPlanId] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string>('Day 1');
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
 
-  // Active Rest Timer & Completion State
   const [activeRestSeconds, setActiveRestSeconds] = useState<number | null>(null);
   const [activeRestExercise, setActiveRestExercise] = useState<string>('');
   const [completedWorkoutsCount, setCompletedWorkoutsCount] = useState(0);
@@ -167,7 +165,6 @@ export default function StrengthPlanDashboard() {
     return `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
   };
 
-  // Continuous timer ticking effect - runs exclusively when isTimerRunning is true
   useEffect(() => {
     if (!isTimerRunning) return;
 
@@ -178,7 +175,6 @@ export default function StrengthPlanDashboard() {
     return () => clearInterval(interval);
   }, [isTimerRunning]);
 
-  // Session day initialization effect: only runs when switching day or plan
   useEffect(() => {
     const currentPlan = plans.find((item) => (item.plan_id ?? item.summary) === expandedPlanId);
     if (!currentPlan) return;
@@ -193,7 +189,6 @@ export default function StrengthPlanDashboard() {
         if (dayProgress?.started_at && sessionSeconds === 0) {
           const startMs = new Date(dayProgress.started_at).getTime();
           const rawDiff = Math.max(0, Math.floor((Date.now() - startMs) / 1000));
-          // If started recently (< 2.5 hours), adopt elapsed time; otherwise start fresh
           const initialSecs = rawDiff < 9000 ? rawDiff : 0;
           setSessionSeconds(initialSecs);
         }
@@ -252,7 +247,6 @@ export default function StrengthPlanDashboard() {
     const dayProgress = getDayProgress(plan, dayLabel);
     const alreadyCompleted = Boolean(dayProgress?.completed);
 
-    // Freeze timer and calculate final session duration
     setIsTimerRunning(false);
     const finalDuration = sessionSeconds > 0
       ? Math.max(sessionSeconds, 30)
@@ -272,7 +266,6 @@ export default function StrengthPlanDashboard() {
         });
         updatePlanProgressState(updatedPlan);
 
-        // Log workout session to backend with ACTUAL recorded duration!
         const matchedDay = plan.days?.find((d) => d.day?.toLowerCase() === dayLabel.toLowerCase());
         const dayTitle = matchedDay?.title || matchedDay?.day || dayLabel;
         const planSummary = plan.summary || 'Strength Plan';
@@ -434,7 +427,6 @@ export default function StrengthPlanDashboard() {
       return;
     }
 
-    // Ensure session timer is actively running if not already started
     if (!isTimerRunning) {
       setActiveSessionDay(dayLabel);
       setIsTimerRunning(true);
@@ -450,7 +442,6 @@ export default function StrengthPlanDashboard() {
       });
       updatePlanProgressState(updatedPlan);
 
-      // Trigger Rest Timer automatically when a set is completed
       if (completed) {
         const planDay = plan.days?.find((d) => d.day === dayLabel);
         const allExercises = planDay?.sections?.flatMap((s) => s.exercises) || planDay?.exercises || [];
@@ -477,7 +468,6 @@ export default function StrengthPlanDashboard() {
       return;
     }
 
-    // Ensure session timer is actively running if not already started
     if (!isTimerRunning) {
       setActiveSessionDay(dayLabel);
       setIsTimerRunning(true);
@@ -702,7 +692,6 @@ export default function StrengthPlanDashboard() {
                       <View style={styles.divider} />
 
                       {workoutStarted && !workoutCompleted ? (
-                        /* Active Session Player View */
                         <View style={styles.activeSessionContainer}>
                           {/* Active Session Header */}
                           <View style={styles.activeSessionHeader}>
@@ -898,7 +887,6 @@ export default function StrengthPlanDashboard() {
                           </TouchableOpacity>
                         </View>
                       ) : (
-                        /* Preview View (Not started or already completed) */
                         <>
                           {/* Day Selector */}
                           {dayLabels.length > 0 && (
@@ -1648,7 +1636,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
 
-  /* Active Session Styles */
   activeSessionContainer: {
     paddingBottom: 16,
   },

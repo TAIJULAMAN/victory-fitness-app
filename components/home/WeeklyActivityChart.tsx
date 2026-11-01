@@ -16,7 +16,7 @@ import { useLanguage } from '../../lib/i18n';
 
 interface DayActivity {
   dayLabel: string;
-  durationMinutes: number; // 0 to 60+
+  durationMinutes: number;
   completed: boolean;
   isToday: boolean;
 }
@@ -29,7 +29,7 @@ const DEFAULT_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
 export function WeeklyActivityChart({ weeklyData }: WeeklyActivityChartProps) {
   const { t } = useLanguage();
-  const currentDayIndex = (new Date().getDay() + 6) % 7; // Mon = 0, Sun = 6
+  const currentDayIndex = (new Date().getDay() + 6) % 7;
 
   const [days, setDays] = useState<DayActivity[]>(() => {
     if (weeklyData) return weeklyData;
@@ -41,7 +41,6 @@ export function WeeklyActivityChart({ weeklyData }: WeeklyActivityChartProps) {
     }));
   });
 
-  // Staggered animated values for each of the 7 bars
   const barAnims = useRef(DEFAULT_DAYS.map(() => new Animated.Value(0))).current;
   const cardRef = useRef<View | null>(null);
   const animatedOnceRef = useRef(false);
@@ -58,7 +57,6 @@ export function WeeklyActivityChart({ weeklyData }: WeeklyActivityChartProps) {
         const workoutsCount = Math.max(Number(user?.workouts_completed ?? 0), 0);
 
         if (streak === 0 && workoutsCount === 0) {
-          // New or inactive user: keep at 0, no fake demo data
           return;
         }
 
@@ -106,7 +104,6 @@ export function WeeklyActivityChart({ weeklyData }: WeeklyActivityChartProps) {
       Animated.parallel(animations).start();
     };
 
-    // On web, use IntersectionObserver so it triggers as soon as scrolled into viewport
     if (Platform.OS === 'web' && typeof IntersectionObserver !== 'undefined') {
       const el = cardRef.current as unknown as HTMLElement | null;
       if (el) {
@@ -127,7 +124,6 @@ export function WeeklyActivityChart({ weeklyData }: WeeklyActivityChartProps) {
       }
     }
 
-    // Native fallback
     runAnimation();
   }, [barAnims, days]);
 

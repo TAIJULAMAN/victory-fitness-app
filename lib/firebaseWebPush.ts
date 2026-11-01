@@ -27,11 +27,6 @@ function hasWebPushConfiguration() {
   return Boolean(String(process.env?.EXPO_PUBLIC_FIREBASE_VAPID_KEY ?? '').trim() && window.firebase);
 }
 
-/**
- * Requests browser notification permission and installs the foreground
- * listener. This is intentionally independent from token registration so the
- * permission prompt can be shown before a user signs in.
- */
 export function setupWebPushNotificationsAsync(): Promise<boolean> {
   if (webPushSetupPromise) {
     return webPushSetupPromise;
@@ -64,7 +59,6 @@ export function setupWebPushNotificationsAsync(): Promise<boolean> {
   })().catch(() => false);
 
   webPushSetupPromise = setupPromise.then((result) => {
-    // Allow a later retry if Firebase scripts/config were not ready yet.
     if (!result || (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default')) {
       webPushSetupPromise = null;
     }
@@ -120,8 +114,6 @@ export async function registerWebPushNotificationsAsync(
     }
   }
 
-  // Do not rely on a device-wide cache: after logout/login the same browser
-  // token must also be registered for the newly authenticated account.
   await apiRequest('/me/push-token', { method: 'POST', body: { token, platform: 'web' } });
   await AsyncStorage.setItem(REGISTERED_TOKEN_KEY, token);
   return token;

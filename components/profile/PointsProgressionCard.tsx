@@ -23,7 +23,7 @@ export default function PointsProgressionCard({ onRefreshNeeded }: PointsProgres
   const { t } = useLanguage();
   const [breakdown, setBreakdown] = useState<PointsBreakdownResponse | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedDayIndex, setSelectedDayIndex] = useState<number>(6); // Default to today (last item)
+  const [selectedDayIndex, setSelectedDayIndex] = useState<number>(6);
 
   const loadBreakdown = async () => {
     try {

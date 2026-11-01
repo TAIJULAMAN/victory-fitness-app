@@ -54,7 +54,6 @@ const getOnboardingAnswersKey = (user?: AuthUser | null) => {
   return userKey ? `${ONBOARDING_ANSWERS_KEY}:${userKey}` : ONBOARDING_ANSWERS_KEY;
 };
 
-// Design tokens matching Claude reference
 const OBSIDIAN = '#0D0D0D';
 const NAVY = '#0D2B45';
 const GOLD = '#C9943A';
@@ -304,14 +303,12 @@ export default function ClaudeOnboardingFlow({
   const { width } = useWindowDimensions();
   const isDesktop = width >= 960;
 
-  // Step state: 2 (Question 1) through 11 (Ready)
   const [step, setStep] = useState<number>(initialStep);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(initialUser);
 
-  // User answers
   const [goal, setGoal] = useState<number>(0);
   const [selectedGoals, setSelectedGoals] = useState<number[]>([0]);
-  const [place, setPlace] = useState<number>(3); // Default Home gym
+  const [place, setPlace] = useState<number>(3);
   const [kit, setKit] = useState<string[]>(['Dumbbells']);
   const [days, setDays] = useState<number>(4);
   const [mins, setMins] = useState<number>(40);
@@ -342,7 +339,7 @@ export default function ClaudeOnboardingFlow({
   const [pct, setPct] = useState<number>(0);
   const [prices, setPrices] = useState<OnboardingPlanPrice[]>(DEFAULT_PRICES);
   const [identity, setIdentity] = useState<string>('');
-  const [tier, setTier] = useState<number>(BETA_TIER_INDEX); // Default 21-Day Gold Beta
+  const [tier, setTier] = useState<number>(BETA_TIER_INDEX);
   const [cycle, setCycle] = useState<'year' | 'month'>('year');
   const [region, setRegion] = useState<string>('de');
   const [method, setMethod] = useState<number>(0);
@@ -364,7 +361,6 @@ export default function ClaudeOnboardingFlow({
     return true;
   };
 
-  // Dynamically load real subscription plans from backend
   useEffect(() => {
     let cancelled = false;
     void fetchSubscriptionPlans()
@@ -442,7 +438,6 @@ export default function ClaudeOnboardingFlow({
           } catch {}
         }
 
-        // 1. Fetch real user profile and real onboarding state from the backend
         let activeUser = initialUser;
         try {
           const freshUser = await fetchCurrentUser({ forceRefresh: true });
@@ -464,7 +459,6 @@ export default function ClaudeOnboardingFlow({
           realMetrics = await fetchCurrentUserBodyMetrics();
         } catch {}
 
-        // 2. Hydrate from backend data if available
         if (realOnboarding && !cancelled) {
           if (realOnboarding.currentStep && realOnboarding.currentStep >= 2 && realOnboarding.currentStep <= 11) {
             if (!stepFromUrl) {
@@ -589,7 +583,6 @@ export default function ClaudeOnboardingFlow({
           }
         }
 
-        // Check if user profile has motivation_statement
         if (activeUser?.motivation_statement && !cancelled) {
           const gIdx = GOALS.findIndex(
             (g) => g[0].toLowerCase() === activeUser?.motivation_statement?.toLowerCase()
@@ -597,7 +590,6 @@ export default function ClaudeOnboardingFlow({
           if (gIdx >= 0) setGoal(gIdx);
         }
 
-        // 3. Overlay any uncommitted answers from local storage
         const scopedAnswersKey = getOnboardingAnswersKey(activeUser);
         const savedAnswersRaw = await AsyncStorage.getItem(scopedAnswersKey);
         if (savedAnswersRaw && !cancelled) {
@@ -668,7 +660,6 @@ export default function ClaudeOnboardingFlow({
     };
   }, []);
 
-  // Auto-save answers whenever they change (only after initial hydration)
   useEffect(() => {
     if (!isHydratedRef.current) return;
     const dataToSave = {
@@ -717,7 +708,6 @@ export default function ClaudeOnboardingFlow({
     step,
   ]);
 
-  // Press and hold repeat logic for steppers (+ / -)
   const holdTimerRef = useRef<any>(null);
   const holdIntervalRef = useRef<any>(null);
 
@@ -732,7 +722,6 @@ export default function ClaudeOnboardingFlow({
     }
   };
 
-  // Weight stepper handlers
   const startIncrement = () => {
     stopHold();
     setWeight((prev) => Math.min(WEIGHT_MAX, prev + 1));
@@ -765,7 +754,6 @@ export default function ClaudeOnboardingFlow({
     }, 240);
   };
 
-  // Height stepper handlers
   const startHeightIncrement = () => {
     stopHold();
     setHeight((prev) => Math.min(HEIGHT_MAX, prev + 1));
@@ -798,7 +786,6 @@ export default function ClaudeOnboardingFlow({
     }, 240);
   };
 
-  // Age stepper handlers
   const startAgeIncrement = () => {
     stopHold();
     setAgeValidationMessage('');
@@ -839,7 +826,6 @@ export default function ClaudeOnboardingFlow({
     };
   }, []);
 
-  // Track width for direct tap adjustment
   const [sliderTrackWidth, setSliderTrackWidth] = useState<number>(0);
   const handleSliderTrackPress = (e: any) => {
     if (sliderTrackWidth <= 0) return;
@@ -868,7 +854,6 @@ export default function ClaudeOnboardingFlow({
     setAge(targetAge);
   };
 
-  // Handle Building Step (Step 6) ticker animation
   const buildTimerRef = useRef<any>(null);
   useEffect(() => {
     if (step === 6) {
@@ -889,7 +874,6 @@ export default function ClaudeOnboardingFlow({
     return () => clearInterval(buildTimerRef.current);
   }, [step]);
 
-  // Live calculations matching Claude reference
   const isHomeGym = place === 3;
   const kitFit = Math.min(
     170,
@@ -944,12 +928,10 @@ export default function ClaudeOnboardingFlow({
     ? `You are saving ${saving(curTier[1], curTier[2])}% against ${money(curTier[2])} a month — ${money(curTier[2] * 12 - curTier[1])} a year.`
     : `Switching to yearly costs ${money(curTier[1])} and saves you ${money(curTier[2] * 12 - curTier[1])} — ${saving(curTier[1], curTier[2])}%.`;
 
-  // Kit toggler
   const toggleKit = (n: string) => {
     setKit((prev) => (prev.includes(n) ? prev.filter((x) => x !== n) : [...prev, n]));
   };
 
-  // Nudge toggler
   const toggleNudge = (n: string) => {
     setNudge((prev) => (prev.includes(n) ? (prev.length > 1 ? prev.filter((x) => x !== n) : prev) : [...prev, n]));
   };
@@ -968,7 +950,6 @@ export default function ClaudeOnboardingFlow({
     setDialCode(normalized || value);
   };
 
-  // Sync state to backend API on milestones
   const persistOnboardingAnswers = async (markComplete = false) => {
     const countryCode = region === 'uk' ? 'GB' : region.toUpperCase();
     const contactNumber = buildE164PhoneNumber(dialCode, dialNumber);
@@ -1070,7 +1051,6 @@ export default function ClaudeOnboardingFlow({
     });
   };
 
-  // Activate trial or subscription with fallback for Phase 1 Beta
   const activateTrialOrSubscription = async () => {
     if (isBetaTierSelected) {
       await startPhaseOneBetaSubscription();
@@ -1101,7 +1081,6 @@ export default function ClaudeOnboardingFlow({
     }
   };
 
-  // Navigation handlers
   const handleNext = async () => {
     if (step === 5) {
       if (age < 14) {
@@ -1111,7 +1090,6 @@ export default function ClaudeOnboardingFlow({
         return;
       }
 
-      // Moving to Building step
       setSubmitting(true);
       try {
         await persistOnboardingAnswers(false);
@@ -1142,13 +1120,11 @@ export default function ClaudeOnboardingFlow({
         return;
       }
 
-      // From Tier selection to Payment step
       goToStep(10);
       return;
     }
 
     if (step === 10) {
-      // Complete Payment / Start trial
       setSubmitting(true);
       try {
         await activateTrialOrSubscription();
@@ -1163,7 +1139,6 @@ export default function ClaudeOnboardingFlow({
     }
 
     if (step === 11) {
-      // Ready -> finish onboarding and save all data to user profile
       setSubmitting(true);
       try {
         await persistOnboardingAnswers(true);
@@ -1209,11 +1184,9 @@ export default function ClaudeOnboardingFlow({
     }
   };
 
-  // Progress bar calculation for question steps (Steps 2 to 5)
   const isQuestionStep = step >= 2 && step <= 5;
   const questionBarPct = Math.round(((step - 1) / 4) * 100);
 
-  // 4 building checklist items
   const buildLines = [
     { text: `Reading your goal: ${GOALS[goal][0].toLowerCase()}`, at: 20 },
     { text: `${kitFit} workouts match your kit`, at: 45 },
@@ -1221,7 +1194,6 @@ export default function ClaudeOnboardingFlow({
     { text: `Week built around ${days} × ${mins} minutes`, at: 95 },
   ];
 
-  // Weekly workout routine
   const weekSchedule = [
     { day: 'MON', title: place === 1 ? 'Upper Body · No Kit' : 'Upper Body Strength', duration: `${mins} min` },
     { day: 'TUE', title: 'Rest or a walk', duration: '—' },
@@ -1231,7 +1203,6 @@ export default function ClaudeOnboardingFlow({
     { day: 'SAT', title: days > 4 ? 'Conditioning Ladder' : 'Rest', duration: days > 4 ? `${mins} min` : '—' },
   ];
 
-  // Active step meta
   const stepMeta = STEPS_META[step] || STEPS_META[2];
 
   return (

@@ -13,7 +13,6 @@ function assert(condition: boolean, message: string) {
 function runNutritionSummaryAudit() {
   console.log('=== STARTING NUTRITION PLAN SUMMARY AUDIT TESTS ===\n');
 
-  // TEST 1: Ghanaian maintenance plan with nut allergy
   const ghanaianPlan: NutritionPlanApiResponse = {
     summary: 'Legacy long essay: Welcome to your 7-day Ghanaian meal plan designed to help you stay healthy and nourished while honoring your local traditions and portions and timing.',
     goal_label: 'Maintenance',
@@ -50,7 +49,6 @@ function runNutritionSummaryAudit() {
   assert(!ghanaResult.fullText.includes('Welcome to your 7-day'), 'Eliminated verbose AI introductory essay');
   assert(ghanaResult.fullText.split('\n').length <= 2, 'Summary is concise (max 2 lines)');
 
-  // TEST 2: German muscle building plan without allergies
   const germanPlan: NutritionPlanApiResponse = {
     summary: 'A detailed high-protein muscle building diet tailored for athletic growth with rich German ingredients and structured macro ratios throughout the entire week.',
     goal_label: 'Muscle Building',
@@ -85,7 +83,6 @@ function runNutritionSummaryAudit() {
   assert(germanResult.contextLine.includes('authentic German options'), 'Context line prioritizes authentic German options');
   assert(!germanResult.contextLine.includes('allergy respected'), 'No allergy mentioned when none specified');
 
-  // TEST 3: Italian weight loss plan with lactose allergy
   const italianPlan: NutritionPlanApiResponse = {
     summary: 'An Italian nutrition plan designed to support fat loss while maintaining authentic Mediterranean culinary flavors and keeping caloric density controlled.',
     goal_label: 'Weight Loss',
@@ -120,7 +117,6 @@ function runNutritionSummaryAudit() {
   assert(italianResult.contextLine.includes('Lactose allergy respected'), 'Context line mentions Lactose allergy respected');
   assert(italianResult.contextLine.includes('authentic Italian options'), 'Context line prioritizes authentic Italian options');
 
-  // TEST 4: Nigerian endurance plan with gluten allergy & vegetarian diet
   const nigerianPlan: NutritionPlanApiResponse = {
     summary: 'A Nigerian endurance plan for high energy.',
     goal_label: 'Energy & Endurance',
@@ -157,7 +153,6 @@ function runNutritionSummaryAudit() {
   assert(nigerianResult.contextLine.includes('Vegetarian diet respected'), 'Vegetarian diet respected');
   assert(nigerianResult.contextLine.includes('authentic Nigerian options'), 'Prioritizes authentic Nigerian options');
 
-  // TEST 5: Default balanced plan without profile (legacy record)
   const legacyPlan: NutritionPlanApiResponse = {
     summary: 'A very long legacy essay that a previous model version stored. It talks on and on without structured metrics, pushing everything down.',
     goal_label: 'Muscle Building',

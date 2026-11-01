@@ -23,18 +23,14 @@ export function sanitizeInput(text: string, type: AllowedInputType): string {
   if (!text) return '';
   switch (type) {
     case 'string':
-      // Strip numeric digits (0-9). Numbers cannot be typed in string-only fields.
       return text.replace(/[0-9]/g, '');
     case 'number':
-      // Strip all non-digit characters. Strings/letters cannot be typed in number-only fields.
       return text.replace(/\D/g, '');
     case 'decimal':
-      // Strip non-numeric non-dot characters. Allow only digits and maximum 1 decimal point.
       return text
         .replace(/[^0-9.]/g, '')
         .replace(/(\..*)\./g, '$1');
     case 'phone':
-      // Allow only digits, spaces, plus, minus, and parentheses
       return text.replace(/[^0-9+\-()\s]/g, '');
     case 'both':
     default:
@@ -65,7 +61,6 @@ export const AuthInput: React.FC<AuthInputProps> = ({
     }
   };
 
-  // Determine standard keyboardType default based on allowedType if not explicitly passed
   let computedKeyboardType = keyboardType;
   if (!computedKeyboardType) {
     if (allowedType === 'number') {

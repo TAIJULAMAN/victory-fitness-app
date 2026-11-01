@@ -1,12 +1,5 @@
-/**
- * Canonical Workout & Exercise Terminology System
- *
- * Ensures workout titles, exercise names, and core fitness terminology remain
- * in canonical English regardless of the selected application language (e.g. German).
- */
 
 export const CANONICAL_EXERCISE_NAMES: readonly string[] = [
-  // Chest / Push
   'Bench Press',
   'Incline Dumbbell Press',
   'Dumbbell Floor Press',
@@ -15,14 +8,12 @@ export const CANONICAL_EXERCISE_NAMES: readonly string[] = [
   'Diamond Push-Up',
   'Pike Push-Up',
   'Chair / Bench Dips',
-  // Shoulders
   'Overhead Press',
   'Dumbbell Overhead Press',
   'Shoulder Press',
   'Lateral Raise',
   'Dumbbell Lateral Raise',
   'Cable Face Pull',
-  // Back / Pull
   'Pull-Up',
   'Lat Pulldown',
   'Inverted Bodyweight Row',
@@ -30,7 +21,6 @@ export const CANONICAL_EXERCISE_NAMES: readonly string[] = [
   'Dumbbell Row',
   'Weighted Row',
   'Chest-Supported Row',
-  // Legs - Quads & Squats
   'Barbell Back Squat',
   'Bodyweight Tempo Squat',
   'Jump Squat',
@@ -41,7 +31,6 @@ export const CANONICAL_EXERCISE_NAMES: readonly string[] = [
   'Reverse Lunge',
   'Walking Lunge',
   'Calf Raise',
-  // Legs - Posterior Chain & Hinges
   'Deadlift',
   'Romanian Deadlift',
   'Dumbbell Romanian Deadlift',
@@ -49,7 +38,6 @@ export const CANONICAL_EXERCISE_NAMES: readonly string[] = [
   'Hip Thrust',
   'Glute Bridge',
   'Single-Leg Glute Bridge',
-  // Arms
   'Dumbbell Curl',
   'Biceps Curl',
   'Hammer Curl',
@@ -57,7 +45,6 @@ export const CANONICAL_EXERCISE_NAMES: readonly string[] = [
   'Dumbbell Skull Crusher',
   'Triceps Pushdown',
   'Triceps Rope Pushdown',
-  // Core & Full Body
   'Plank',
   'Hollow Hold',
   'Mountain Climber',
@@ -100,7 +87,6 @@ export const CANONICAL_WORKOUT_TITLES: readonly string[] = [
 ];
 
 export const GERMAN_TO_ENGLISH_FITNESS_MAP: Record<string, string> = {
-  // Workouts & splits
   oberkörper: 'Upper Body',
   unterkörper: 'Lower Body',
   ganzkörper: 'Full Body',
@@ -118,7 +104,6 @@ export const GERMAN_TO_ENGLISH_FITNESS_MAP: Record<string, string> = {
   'ganzkörper power': 'Full Body Power',
   'oberkörper volumen': 'Upper Body Volume',
   'unterkörper volumen': 'Lower Body Volume',
-  // Exercises
   bankdrücken: 'Bench Press',
   latzug: 'Lat Pulldown',
   'lat-zug': 'Lat Pulldown',
@@ -172,7 +157,6 @@ export const GERMAN_TO_ENGLISH_FITNESS_MAP: Record<string, string> = {
   schrägbankdrücken: 'Incline Dumbbell Press',
   fliegende: 'Dumbbell Chest Flye',
   brustpresse: 'Dumbbell Floor Press',
-  // Common kit / equipment terminology
   langhantel: 'Barbell',
   kurzhantel: 'Dumbbell',
   kurzhanteln: 'Dumbbells',
@@ -220,10 +204,6 @@ const FITNESS_ROOT_REGEXES = FITNESS_ROOT_PATTERNS.map(
   (root) => new RegExp(`\\b${root.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i')
 );
 
-/**
- * Checks if a string represents an exercise, workout title, or fitness terminology
- * that must remain in canonical English.
- */
 export function isCanonicalFitnessTerm(text: string): boolean {
   const cleaned = String(text || '').trim().toLowerCase();
   if (!cleaned) return false;
@@ -234,26 +214,20 @@ export function isCanonicalFitnessTerm(text: string): boolean {
   return FITNESS_ROOT_REGEXES.some((rx) => rx.test(cleaned));
 }
 
-/**
- * Restores or preserves a fitness term in its canonical English representation.
- */
 export function canonicalizeFitnessText(text: string): string {
   const original = String(text || '').trim();
   if (!original) return '';
 
   const cleaned = original.toLowerCase();
 
-  // 1. Direct German translation lookup
   if (cleaned in GERMAN_TO_ENGLISH_FITNESS_MAP) {
     return GERMAN_TO_ENGLISH_FITNESS_MAP[cleaned];
   }
 
-  // 2. Exact English canonical match with proper casing
   if (cleaned in EXACT_ENGLISH_MAP) {
     return EXACT_ENGLISH_MAP[cleaned];
   }
 
-  // 3. Substring replacement for German compound phrases
   let result = original;
   for (const [ger, eng] of Object.entries(GERMAN_TO_ENGLISH_FITNESS_MAP)) {
     if (cleaned.includes(ger)) {

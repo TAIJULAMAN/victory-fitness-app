@@ -21,7 +21,6 @@ import { recordAnalyticsEvent } from '../../lib/api';
 const DEFAULT_THUMBNAIL =
   'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=300&auto=format&fit=crop';
 
-// High performance animated exercise GIF demonstration fallback
 const FALLBACK_EXERCISE_GIF =
   'https://media.giphy.com/media/3o7TKSjRrfIPjeiVyM/giphy.gif';
 
@@ -35,21 +34,18 @@ function detectOptimalVideoQuality(): VideoQuality {
       (navigator as any).webkitConnection;
     if (conn) {
       const eff = String(conn.effectiveType || '').toLowerCase();
-      // 3G or slower -> 360p
       if (eff === 'slow-2g' || eff === '2g' || eff === '3g') {
         return '360p';
       }
-      // Standard cellular 4G -> 720p
       if (eff === '4g' && conn.type === 'cellular') {
         return '720p';
       }
-      // High-speed WiFi / Desktop -> 1080p
       if (conn.type === 'wifi' || conn.type === 'ethernet' || !conn.type) {
         return '1080p';
       }
     }
   }
-  return '720p'; // standard default
+  return '720p';
 }
 
 function applyQualityToVideoUrl(url: string, quality: VideoQuality): string {

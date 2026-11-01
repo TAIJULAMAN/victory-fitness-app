@@ -88,7 +88,6 @@ export default function SavedWeekScreen() {
   const [error, setError] = useState(false);
   const [attempt, setAttempt] = useState(0);
 
-  // Single-day accordion: tracks the day key of the currently open day
   const [expandedDay, setExpandedDay] = useState<string | null>(null);
 
   useEffect(() => {
@@ -100,7 +99,6 @@ export default function SavedWeekScreen() {
         if (!active) return;
         setPlan(value);
         if (value && value.days && value.days.length > 0) {
-          // Default expand today if found, else first day
           const dayShorts = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
           const todayShort = dayShorts[new Date().getDay()];
           const matchedDay = value.days.find(
@@ -196,7 +194,6 @@ export default function SavedWeekScreen() {
               const dayLabel = formatDayLabel(dayPlan.day, t);
               const macros = getDayMacros(dayPlan);
 
-              // Gather snacks
               const snacks: { label: string; meal: NutritionMealEntry }[] = [];
               if (dayPlan.pre_workout) {
                 snacks.push({ label: t('Pre-workout snack'), meal: dayPlan.pre_workout });
@@ -205,7 +202,6 @@ export default function SavedWeekScreen() {
                 snacks.push({ label: t('Post-workout snack'), meal: dayPlan.post_workout });
               }
 
-              // Also check any extra snack fields
               Object.keys(dayPlan).forEach((key) => {
                 if (!['day', 'breakfast', 'lunch', 'dinner', 'pre_workout', 'post_workout'].includes(key)) {
                   const val = dayPlan[key] as any;
@@ -532,7 +528,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  // Accordion Day Card
   accordionContainer: {
     gap: 12,
   },
@@ -575,7 +570,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  // Expanded Day Content
   dayBody: {
     paddingHorizontal: 16,
     paddingBottom: 18,
@@ -585,7 +579,6 @@ const styles = StyleSheet.create({
     borderTopColor: 'rgba(255, 255, 255, 0.06)',
   },
 
-  // Meal Card
   mealCard: {
     backgroundColor: CARD_SURFACE,
     borderRadius: 14,
@@ -702,7 +695,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  // Day Preparation Card
   dayPrepCard: {
     backgroundColor: 'rgba(201, 148, 58, 0.08)',
     borderRadius: 12,
@@ -724,7 +716,6 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 
-  // Shopping List Section
   shoppingListSection: {
     marginTop: 20,
     gap: 12,

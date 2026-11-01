@@ -26,7 +26,6 @@ import { ScreenState } from '../../../components/ScreenState';
 import { useAsyncScreenData } from '../../../hooks/useAsyncScreenData';
 import { useTheme } from '../../../context/ThemeContext';
 
-// Luxury Design Tokens
 const OBSIDIAN = '#0D0D0D';
 const NAVY = '#0D2B45';
 const GOLD = '#C9943A';

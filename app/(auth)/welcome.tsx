@@ -70,14 +70,12 @@ export default function WelcomeScreen() {
   const isDesktop = width >= 960;
   const isTablet = width >= 640 && width < 960;
 
-  // Animation values matching prototype's vfLaunch and vfBreathe
   const logoLaunch = useRef(new Animated.Value(0)).current;
   const breatheAnim = useRef(new Animated.Value(1)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const useNativeDriver = Platform.OS !== 'web';
 
   useEffect(() => {
-    // vfLaunch 1.1s cubic-bezier(.2,.9,.24,1)
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -92,7 +90,6 @@ export default function WelcomeScreen() {
         useNativeDriver,
       }),
     ]).start(() => {
-      // vfBreathe 4.5s ease-in-out infinite
       Animated.loop(
         Animated.sequence([
           Animated.timing(breatheAnim, {
@@ -137,7 +134,6 @@ export default function WelcomeScreen() {
     pushRoute(router, '/login');
   };
 
-  // Language selector: ONLY EN and DE
   const renderLanguagePill = () => (
     <View style={styles.langPillContainer}>
       {(['en', 'de'] as Language[]).map((code) => {
@@ -167,7 +163,6 @@ export default function WelcomeScreen() {
     </View>
   );
 
-  // Animated logo with golden vertical trail line
   const renderAnimatedLogo = (isLarge: boolean = false) => (
     <View style={[styles.logoSection, isLarge && styles.logoSectionLarge]}>
       <View
@@ -207,7 +202,6 @@ export default function WelcomeScreen() {
     </View>
   );
 
-  // Stats block: 170 workouts, 35 challenges, 3 min setup
   const renderStatsRow = () => (
     <View style={styles.statsRow}>
       <View style={styles.statCol}>
@@ -368,7 +362,6 @@ export default function WelcomeScreen() {
             </View>
           </View>
         ) : (
-          /* MOBILE & TABLET FLEXIBLE PORTRAIT VIEW */
           <View style={[styles.mobileContainer, isTablet && styles.tabletContainer]}>
             {/* Centered Logo with trail & breathe animation */}
             {renderAnimatedLogo(false)}
@@ -452,7 +445,6 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
 
-  // Header styles
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -493,7 +485,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // Language Pill: ONLY EN and DE
   langPillContainer: {
     flexDirection: 'row',
     gap: 4,
@@ -529,7 +520,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 
-  // Desktop 2-Column Responsive Layout
   desktopMainRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -617,7 +607,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // Mobile / Tablet Portrait Container
   mobileContainer: {
     width: '100%',
     maxWidth: 440,
@@ -629,7 +618,6 @@ const styles = StyleSheet.create({
     maxWidth: 580,
   },
 
-  // Logo & Animation styles
   logoSection: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -665,7 +653,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ filter: 'drop-shadow(0 10px 36px rgba(0,0,0,0.75))' } as any) : {}),
   },
 
-  // Mobile Copy & Spacing
   flexibleSpacer: {
     flex: 1,
     minHeight: 24,
@@ -719,7 +706,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'JetBrains Mono', monospace" } as any) : {}),
   },
 
-  // Stats Section
   statsSection: {
     paddingBottom: 8,
   },
@@ -754,7 +740,6 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? ({ fontFamily: "'DM Sans', sans-serif" } as any) : {}),
   },
 
-  // CTAs
   primaryCta: {
     width: '100%',
     height: 56,

@@ -15,11 +15,11 @@ import { apiRequest } from '../../lib/api';
 
 interface CohortMessage {
   id: string;
-  n: string; // name
-  i: string; // initials
+  n: string;
+  i: string;
   profileImage?: string;
-  t: string; // time
-  m: string; // message
+  t: string;
+  m: string;
   isMe?: boolean;
 }
 

@@ -75,7 +75,6 @@ export default function JournalScreen() {
   const [pastEntries, setPastEntries] = useState<JournalEntry[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
 
-  // Dynamic daily prompt
   const dayIndex = new Date().getDay();
   const currentPrompt = PROMPTS[dayIndex % PROMPTS.length];
 

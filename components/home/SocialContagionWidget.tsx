@@ -57,7 +57,7 @@ export default function SocialContagionWidget() {
     void loadActivity();
     const interval = setInterval(() => {
       void loadActivity();
-    }, 60000); // 1 minute near real-time refresh
+    }, 60000);
 
     return () => {
       cancelled = true;
@@ -71,7 +71,6 @@ export default function SocialContagionWidget() {
     Boolean(currentUser?.gold_trial?.active) ||
     ['SILVER', 'GOLD', 'PLATINUM', 'INNER_CIRCLE', 'GOLD_BETA'].includes(tier);
 
-  // Locked card for Free tier per Section 20.2 (Silver and above)
   if (userLoaded && !isSilverOrAbove) {
     return (
       <View style={[styles.card, styles.lockedCard]}>
@@ -98,7 +97,6 @@ export default function SocialContagionWidget() {
     );
   }
 
-  // Dynamic 3-state headline logic per Section 20.2
   const computedHeadline =
     headline ||
     (userTrainedToday

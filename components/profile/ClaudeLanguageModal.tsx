@@ -33,7 +33,6 @@ const DMSANS = Platform.select({ web: "'DM Sans', sans-serif", default: 'DMSans-
 const INTER = Platform.select({ web: "'Inter', sans-serif", default: 'Inter-Regular' });
 const MONO = Platform.select({ web: "'JetBrains Mono', monospace", default: 'JetBrainsMono-Bold' });
 
-// Popular quick selection languages
 const POPULAR_CODES = new Set(['en', 'de', 'es', 'fr', 'it', 'pt', 'bn', 'nl']);
 
 export default function ClaudeLanguageModal({
